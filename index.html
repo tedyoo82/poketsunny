@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>포케써니 | Pokémon GO 레이드 & 정보</title>
+  <meta name="description" content="포켓몬GO를 더 즐겁게 즐기기 위한 실전 레이드 공략과 게임 정보, 그리고 잠들기 전 편안하게 듣는 포켓몬 이야기와 신화를 전합니다." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- ===== 배경 장식 ===== -->
+  <div class="bg" aria-hidden="true">
+    <div class="bg__glow bg__glow--top"></div>
+    <div class="bg__glow bg__glow--bottom"></div>
+    <div class="stars"></div>
+  </div>
+
+  <!-- ===== 헤더 ===== -->
+  <header class="header">
+    <div class="header__inner">
+      <a class="brand" href="#top">
+        <span class="brand__ball" aria-hidden="true"></span>
+        <span class="brand__name">포케써니</span>
+      </a>
+
+      <nav class="nav" aria-label="주요 메뉴">
+        <a href="#about">소개</a>
+        <a href="#content">콘텐츠</a>
+        <a href="#subscribe">구독</a>
+      </nav>
+
+      <a class="btn btn--sm btn--ghost" href="https://www.youtube.com/@Poke_Sunny" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.5 15.5v-7l6.5 3.5-6.5 3.5Z"/></svg>
+        유튜브
+      </a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ===== 히어로 ===== -->
+    <section class="hero reveal">
+      <div class="hero__badge">
+        <span class="dot" aria-hidden="true"></span> 포켓몬GO 레이드 &amp; 정보 채널
+      </div>
+
+      <h1 class="hero__title">
+        포켓몬GO를<br />
+        <span class="grad">더 깊고 재밌게</span> 즐기는 시간
+      </h1>
+
+      <p class="hero__lead">
+        직접 플레이한 경험을 바탕으로 실전 레이드 공략과 포켓몬 활용 정보를 전합니다.
+        때로는 잠들기 전, 편안하게 듣는 포켓몬 이야기와 신화도 함께 해요.
+      </p>
+
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="https://www.youtube.com/@Poke_Sunny" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.5 15.5v-7l6.5 3.5-6.5 3.5Z"/></svg>
+          채널 구독하기
+        </a>
+        <a class="btn btn--ghost" href="#content">콘텐츠 보기</a>
+      </div>
+
+      <!-- 통계 -->
+      <dl class="stats">
+        <div class="stat">
+          <dt>구독자</dt>
+          <dd class="stat__num" data-count="114">114</dd>
+        </div>
+        <div class="stat">
+          <dt>동영상</dt>
+          <dd class="stat__num" data-count="66">66</dd>
+        </div>
+        <div class="stat">
+          <dt>조회수</dt>
+          <dd class="stat__num" data-count="153532">153,532</dd>
+        </div>
+      </dl>
+    </section>
+
+    <!-- ===== 소개 ===== -->
+    <section class="section" id="about">
+      <div class="section__head">
+        <span class="eyebrow">ABOUT</span>
+        <h2>포케써니는 어떤 채널이에요?</h2>
+      </div>
+
+      <div class="about">
+        <p class="about__text">
+          <strong>🎮 포케써니</strong>는 포켓몬GO를 <em>더 즐겁게</em> 즐기기 위한 채널입니다.
+          화면 속 숫자나 가이드북이 아니라, <strong>직접 플레이한 경험</strong>에서 나온 공략이에요.
+          그래서 실제로 쓰는 포켓몬 조합, 실전에서 마주치는 상황, 그리고 "이건 진짜 좋더라" 싶은 정보까지
+          체감 기반으로 전합니다.
+        </p>
+
+        <ul class="about__points">
+          <li>
+            <span class="pt__ic">⚔️</span>
+            <div>
+              <h3>실전 레이드 공략</h3>
+              <p>레이드 보스를 어떻게 잡는지, 어떤 포켓몬이 잘 먹히는지를 실전 중심으로 정리합니다.</p>
+            </div>
+          </li>
+          <li>
+            <span class="pt__ic">📈</span>
+            <div>
+              <h3>포켓몬 활용 정보</h3>
+              <p>이 포켓몬, 어디에 쓰면 좋은지. 육성 가치와 배치 팁까지 게임 정보를 함께 알려드려요.</p>
+            </div>
+          </li>
+          <li>
+            <span class="pt__ic">🌙</span>
+            <div>
+              <h3>잠들기 전 이야기</h3>
+              <p>잠들기 전 편안하게 듣는 포켓몬 이야기와 신화. 하루를 마무리하는 시간의 친구가 되어줄게요.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== 콘텐츠 카테고리 ===== -->
+    <section class="section" id="content">
+      <div class="section__head">
+        <span class="eyebrow">CONTENT</span>
+        <h2>두 가지, 포케써니의 콘텐츠</h2>
+      </div>
+
+      <div class="cards">
+        <article class="card card--battle">
+          <div class="card__glow card__glow--battle" aria-hidden="true"></div>
+          <span class="card__tag">⚔️ 실전 레이드 &amp; 정보</span>
+          <h3 class="card__title">레이드 보스를 잡는 방법</h3>
+          <p class="card__desc">
+            실전 레이드 공략과 포켓몬 활용 정보. 어떤 포켓몬이 강한지, 어떤 조합으로
+            보스를 무너뜨리는지 직접 플레이한 경험으로 설명합니다.
+          </p>
+          <ul class="card__list">
+            <li>레이드 보스 실전 공략</li>
+            <li>강력한 포켓몬 추천 &amp; 육성</li>
+            <li>포켓몬 활용 / 배치 팁</li>
+          </ul>
+
+          <!-- 대표 영상 썸네일 -->
+          <div class="thumbs">
+            <a class="thumb" href="https://www.youtube.com/watch?v=VkNF1t4fHZw" target="_blank" rel="noopener">
+              <img src="https://i.ytimg.com/vi/VkNF1t4fHZw/hqdefault.jpg" alt="이벨타르의 모든 것 | 제르네아스·지가르데와 6세대 XYZ" loading="lazy" />
+              <span class="thumb__label">이벨타르의 모든 것</span>
+            </a>
+            <a class="thumb" href="https://www.youtube.com/watch?v=byM2LSyQXpc" target="_blank" rel="noopener">
+              <img src="https://i.ytimg.com/vi/byM2LSyQXpc/hqdefault.jpg" alt="바다를 지배하는 가이오가 그란돈·레쿠쟈 관계부터 약점·졸업스킬" loading="lazy" />
+              <span class="thumb__label">바다를 지배하는 가이오가</span>
+            </a>
+            <a class="thumb" href="https://www.youtube.com/watch?v=vZ9tZgDEB-M" target="_blank" rel="noopener">
+              <img src="https://i.ytimg.com/vi/vZ9tZgDEB-M/hqdefault.jpg" alt="지가르데 3가지 폼부터 셀 250개까지" loading="lazy" />
+              <span class="thumb__label">지가르데 어디까지 알고 있니?</span>
+            </a>
+          </div>
+
+          <a class="card__link" href="https://www.youtube.com/@Poke_Sunny/videos" target="_blank" rel="noopener">
+            영상 보러가기
+            <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </article>
+
+        <article class="card card--story">
+          <div class="card__glow card__glow--story" aria-hidden="true"></div>
+          <span class="card__tag">🌙 잠들기 전 이야기</span>
+          <h3 class="card__title">편안하게 듣는 포켓몬 이야기</h3>
+          <p class="card__desc">
+            잠들기 전, 부담 없이 듣기 좋은 포켓몬 이야기와 신화. 펄기아, 디아루가 같은
+            신화의 속삭임을 배경으로 하루의 마무리를 함께 합니다.
+          </p>
+          <ul class="card__list">
+            <li>잠들기 전 듣는 이야기</li>
+            <li>포켓몬 신화와 세계관</li>
+            <li>차분한 보이스, 편안한 분위기</li>
+          </ul>
+
+          <!-- 대표 영상 썸네일 -->
+          <div class="thumbs">
+            <a class="thumb" href="https://www.youtube.com/watch?v=35MOoSt5-wI" target="_blank" rel="noopener">
+              <img src="https://i.ytimg.com/vi/35MOoSt5-wI/hqdefault.jpg" alt="잠들기 전 포켓몬 이야기 신화 속 펄기아와 세계의 탄생" loading="lazy" />
+              <span class="thumb__label">잠들기 전 이야기</span>
+            </a>
+            <a class="thumb" href="https://www.youtube.com/watch?v=isO37PGtYtY" target="_blank" rel="noopener">
+              <img src="https://i.ytimg.com/vi/isO37PGtYtY/hqdefault.jpg" alt="잠들기 전 포켓몬 이야기 시간의 신 디아루가" loading="lazy" />
+              <span class="thumb__label">시간의 신 디아루가</span>
+            </a>
+            <a class="thumb" href="https://www.youtube.com/watch?v=8zUQDxUkVig" target="_blank" rel="noopener">
+              <img src="https://i.ytimg.com/vi/8zUQDxUkVig/hqdefault.jpg" alt="한카리아스 어디까지 알고 있니 딥상어동 데이" loading="lazy" />
+              <span class="thumb__label">한카리아스 딥상어동</span>
+            </a>
+          </div>
+
+          <a class="card__link" href="https://www.youtube.com/@Poke_Sunny/videos" target="_blank" rel="noopener">
+            영상 보러가기
+            <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===== 구독 ===== -->
+    <section class="section section--cta" id="subscribe">
+      <div class="cta">
+        <span class="cta__ball" aria-hidden="true"></span>
+        <h2>오늘도 포케써니와 함께<br />즐거운 포켓몬GO!</h2>
+        <p>구독과 좋아요는 영상 제작에 큰 힘이 됩니다. 💛</p>
+        <div class="cta__actions">
+          <a class="btn btn--primary btn--lg" href="https://www.youtube.com/@Poke_Sunny" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.5 15.5v-7l6.5 3.5-6.5 3.5Z"/></svg>
+            유튜브에서 구독하기
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== 푸터 ===== -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <a class="brand brand--footer" href="#top">
+        <span class="brand__ball" aria-hidden="true"></span>
+        <span class="brand__name">포케써니</span>
+      </a>
+      <p class="footer__note">포켓몬GO 레이드 공략 &amp; 게임 정보 · 잠들기 전 듣는 포켓몬 이야기</p>
+      <a class="footer__yt" href="https://www.youtube.com/@Poke_Sunny" target="_blank" rel="noopener">
+        @Poke_Sunny
+      </a>
+      <p class="footer__copy">© 2026 포케써니 · 본 페이지는 포케써니 유튜브 채널 홍보용입니다.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
