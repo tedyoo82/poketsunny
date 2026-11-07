@@ -17,13 +17,10 @@
       .then(function (data) {
         var count = parseInt(data.value, 10) || 0;
         badge.textContent = count.toLocaleString("ko-KR");
-        badge.classList.add("is-visible");
       })
       .catch(function (err) {
-        // API 실패 시에도 표시 (숫자 없이 "방문"만)
         console.warn("[pokesunny] visit counter fetch failed:", err);
         badge.textContent = "—";
-        badge.classList.add("is-visible");
       });
   }
 
