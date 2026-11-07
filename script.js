@@ -3,24 +3,27 @@
 (function () {
   "use strict";
 
-  // --- 방문자 카운팅 (countapi.mileshilliard.com 무료 API, countapi.xyz 후속 서비스) ---
+  // --- 방문자 카운팅 (countapi.mileshilliard.com 무료 API) ---
   function trackVisit() {
     var id = "pokesunny_homepage_v1";
+    var badge = document.querySelector(".visit-badge");
+    if (!badge) return;
+
     fetch("https://countapi.mileshilliard.com/api/v1/hit/" + id)
       .then(function (r) {
-        if (!r.ok) throw new Error(r.status);
+        if (!r.ok) throw new Error("HTTP " + r.status);
         return r.json();
       })
       .then(function (data) {
-        var count = data.value || 0;
-        var badge = document.querySelector(".visit-badge");
-        if (badge) {
-          badge.textContent = "방문자 " + count.toLocaleString("ko-KR") + "명";
-          badge.classList.add("is-visible");
-        }
+        var count = parseInt(data.value, 10) || 0;
+        badge.textContent = count.toLocaleString("ko-KR");
+        badge.classList.add("is-visible");
       })
-      .catch(function () {
-        // API 실패 시 무시
+      .catch(function (err) {
+        // API 실패 시에도 표시 (숫자 없이 "방문"만)
+        console.warn("[pokesunny] visit counter fetch failed:", err);
+        badge.textContent = "—";
+        badge.classList.add("is-visible");
       });
   }
 
