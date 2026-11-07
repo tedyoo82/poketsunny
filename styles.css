@@ -596,6 +596,107 @@ body {
   margin-top: 6px;
 }
 
+/* ============ 최근 영상 ============ */
+.section__head {
+  position: relative;
+}
+.section__more {
+  position: absolute;
+  right: 0;
+  bottom: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--cyan);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: color 0.2s, gap 0.2s;
+}
+.section__more:hover { color: var(--ink); gap: 10px; }
+.section__more .ic { width: 0.9em; height: 0.9em; }
+
+.vid-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.vid-grid__loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--ink-dim);
+  font-size: 0.95rem;
+  padding: 40px 0;
+}
+
+.vid-card {
+  display: block;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--ink);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.vid-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(55, 214, 230, 0.4);
+  box-shadow: 0 8px 30px rgba(55, 214, 230, 0.12);
+}
+
+.vid-card__thumb {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--bg-2);
+}
+.vid-card__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.vid-card:hover .vid-card__thumb img { transform: scale(1.05); }
+
+.vid-card__dur {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: var(--font-en);
+  padding: 2px 7px;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
+}
+
+.vid-card__body {
+  padding: 14px 16px 16px;
+}
+.vid-card__title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.vid-card:hover .vid-card__title { color: var(--cyan); }
+
+.vid-card__meta {
+  display: flex;
+  gap: 10px;
+  color: var(--ink-dim);
+  font-size: 0.78rem;
+}
+.vid-card__meta span { white-space: nowrap; }
+
 /* ============ 애니메이션(스크롤) ============ */
 .reveal {
   opacity: 0;
@@ -615,6 +716,12 @@ body {
   .hero { padding-top: 64px; }
   .thumbs { gap: 10px; }
   .thumb__label { font-size: 0.62rem; }
+  .vid-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .section__more { position: static; margin-top: 10px; }
+}
+
+@media (max-width: 480px) {
+  .vid-grid { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {
