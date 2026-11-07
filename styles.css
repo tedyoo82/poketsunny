@@ -292,17 +292,7 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-/* 방문자 배지 */
-.stat--visit .stat__num {
-  background: linear-gradient(180deg, var(--cyan), var(--blue));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-.visit-badge {
-  font-size: clamp(1rem, 2.5vw, 1.3rem);
-  font-weight: 700;
-}
+/* 방문자 배지 — 다른 통계와 동일한 스타일 */
 
 /* ============ 섹션 공통 ============ */
 .section {
