@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tedyoo82.github.io/poketsunny/sitemap.xml
