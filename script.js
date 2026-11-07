@@ -3,6 +3,27 @@
 (function () {
   "use strict";
 
+  // --- 방문자 카운팅 (countapi.xyz 무료 API) ---
+  function trackVisit() {
+    var id = "pokesunny-homepage";
+    fetch("https://countapi.xyz/hit/" + id)
+      .then(function (r) {
+        if (!r.ok) throw new Error(r.status);
+        return r.json();
+      })
+      .then(function (data) {
+        var count = data.value || 0;
+        var badge = document.querySelector(".visit-badge");
+        if (badge) {
+          badge.textContent = "방문자 " + count.toLocaleString("ko-KR") + "명";
+          badge.classList.add("is-visible");
+        }
+      })
+      .catch(function () {
+        // API 실패 시 무시
+      });
+  }
+
   // stats.json에서 실시간 통계 로드 (GitHub Actions에서 매일 갱신)
   function loadStats(callback) {
     fetch("stats.json", { cache: "no-store" })
@@ -91,6 +112,9 @@
       });
       startCounters();
     }
+
+    // 방문자 카운팅
+    trackVisit();
 
     // stats.json 로드 → data-count 갱신
     loadStats(function (stats) {
