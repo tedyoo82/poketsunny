@@ -3,10 +3,10 @@
 (function () {
   "use strict";
 
-  // --- 방문자 카운팅 (countapi.xyz 무료 API) ---
+  // --- 방문자 카운팅 (countapi.mileshilliard.com 무료 API, countapi.xyz 후속 서비스) ---
   function trackVisit() {
-    var id = "pokesunny-homepage";
-    fetch("https://countapi.xyz/hit/" + id)
+    var id = "pokesunny_homepage_v1";
+    fetch("https://countapi.mileshilliard.com/api/v1/hit/" + id)
       .then(function (r) {
         if (!r.ok) throw new Error(r.status);
         return r.json();
