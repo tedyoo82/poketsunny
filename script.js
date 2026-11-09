@@ -230,10 +230,25 @@
       });
   }
 
-  // ---개시판(GitHub Issues 기반) ---
-  var GH_REPO = "tedyoo82/poketsunny";
-  var GH_API = "https://api.github.com/repos/" + GH_REPO;
-  var GH_LABEL = "message";
+  // ---게시판(Firebase Realtime Database 기반) ---
+  var FB_CONFIG = {
+    apiKey: "AIzaSyAqptwwzfKOiuGFqM3gQEr9E7tTGF_CmGc",
+    authDomain: "pokesunny-guestbook.firebaseapp.com",
+    databaseURL: "https://pokesunny-guestbook-default-rtdb.firebaseio.com",
+    projectId: "pokesunny-guestbook",
+    storageBucket: "pokesunny-guestbook.firebasestorage.app",
+    messagingSenderId: "",
+    appId: ""
+  };
+
+  var fbApp = null;
+  var fbDb = null;
+
+  function initFirebase() {
+    if (fbDb) return;
+    fbApp = firebase.initializeApp(FB_CONFIG);
+    fbDb = firebase.database();
+  }
 
   function escapeHtml(str) {
     var div = document.createElement("div");
@@ -241,8 +256,8 @@
     return div.innerHTML;
   }
 
-  function timeAgo(isoStr) {
-    var date = new Date(isoStr);
+  function timeAgo(ts) {
+    var date = new Date(ts);
     var now = new Date();
     var diff = Math.floor((now - date) / 1000);
     if (diff < 60) return "방금 전";
@@ -257,48 +272,45 @@
     var list = document.getElementById("board-list");
     if (!list) return;
 
-    fetch(GH_API + "/issues?labels=" + GH_LABEL + "&state=all&per_page=50&sort=created&direction=desc", {
-      cache: "no-store"
-    })
-      .then(function (r) {
-        if (!r.ok) throw new Error("HTTP " + r.status);
-        return r.json();
-      })
-      .then(function (issues) {
-        // 라벨이 message인 것만 필터링
-        var msgs = issues.filter(function (iss) {
-          return iss.labels && iss.labels.some(function (l) {
-            return l.name === GH_LABEL;
-          });
-        });
+    initFirebase();
+    fbDb.ref("messages").once("value", function (snap) {
+      var data = snap.val();
+      if (!data) {
+        list.innerHTML = '<div class="board__empty">아직 메시지가 없어요.<br />첫 번째 메시지를 남겨보세요! ✨</div>';
+        return;
+      }
+      // 배열로 변환하여 최신순 정렬
+      var msgs = Object.keys(data).map(function (key) {
+        var m = data[key];
+        m._id = key;
+        return m;
+      }).sort(function (a, b) { return b.ts - a.ts; });
 
-        if (msgs.length === 0) {
-          list.innerHTML = '<div class="board__empty">아직 메시지가 없어요.<br />첫 번째 메시지를 남겨보세요! ✨</div>';
-          return;
-        }
+      if (msgs.length === 0) {
+        list.innerHTML = '<div class="board__empty">아직 메시지가 없어요.<br />첫 번째 메시지를 남겨보세요! ✨</div>';
+        return;
+      }
 
-        list.innerHTML = "";
-        msgs.forEach(function (iss) {
-          // title: 이름, body: 메시지
-          var name = iss.title || "방문자";
-          var msg = iss.body || "";
-          var time = timeAgo(iss.created_at);
+      list.innerHTML = "";
+      msgs.forEach(function (m) {
+        var name = m.name || "방문자";
+        var msg = m.msg || "";
+        var time = timeAgo(m.ts);
 
-          var el = document.createElement("div");
-          el.className = "board__item";
-          el.innerHTML =
-            '<div class="board__item-head">' +
-              '<span class="board__item-name">' + escapeHtml(name) + '</span>' +
-              '<span class="board__item-time">' + escapeHtml(time) + '</span>' +
-            '</div>' +
-            '<p class="board__item-msg">' + escapeHtml(msg) + '</p>';
-          list.appendChild(el);
-        });
-      })
-      .catch(function (err) {
-        console.warn("[pokesunny] messages fetch failed:", err);
-        list.innerHTML = '<div class="board__error">메시지를 불러오지 못했어요. 잠시 후 다시 시도해주세요.</div>';
+        var el = document.createElement("div");
+        el.className = "board__item";
+        el.innerHTML =
+          '<div class="board__item-head">' +
+            '<span class="board__item-name">' + escapeHtml(name) + '</span>' +
+            '<span class="board__item-time">' + escapeHtml(time) + '</span>' +
+          '</div>' +
+          '<p class="board__item-msg">' + escapeHtml(msg) + '</p>';
+        list.appendChild(el);
       });
+    }, function (err) {
+      console.warn("[pokesunny] messages fetch failed:", err);
+      list.innerHTML = '<div class="board__error">메시지를 불러오지 못했어요. 잠시 후 다시 시도해주세요.</div>';
+    });
   }
 
   function initBoard() {
@@ -308,6 +320,13 @@
 
     // 메시지 로드
     loadMessages();
+
+    // 실시간 업데이트 구독
+    initFirebase();
+    fbDb.ref("messages").on("child_added", function () {
+      // 새 메시지가 추가되면 목록 갱신
+      loadMessages();
+    });
 
     // 제출 핸들러
     form.addEventListener("submit", function (e) {
@@ -326,38 +345,26 @@
       btn.disabled = true;
       btn.innerHTML = '남기는 중…';
 
-      fetch(GH_API + "/issues", {
-        method: "POST",
-        headers: {
-          "Accept": "application/vnd.github+json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          title: name,
-          body: msg,
-          labels: [GH_LABEL]
-        })
-      })
-        .then(function (r) {
-          if (!r.ok) throw new Error("HTTP " + r.status);
-          return r.json();
-        })
-        .then(function (issue) {
+      var payload = {
+        name: name,
+        msg: msg,
+        ts: Date.now()
+      };
+
+      fbDb.ref("messages").push(payload)
+        .then(function () {
           // 폼 초기화
           form.reset();
-          // 메시지 목록 다시 로드
-          loadMessages();
           // 버튼 복원
           btn.disabled = false;
           btn.innerHTML =
             '<svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7Z"/></svg>' +
             ' 메시지 남기기';
 
-          // 성공 알림 (일시적으로)
-          var orig = list.innerHTML;
+          // 성공 알림
           var notify = document.createElement("div");
           notify.className = "board__notify";
-          notify.textContent = "✨ 메시지가 남겨졌어요! (GitHub Issues에 저장됨)";
+          notify.textContent = "✨ 메시지가 남겨졌어요!";
           list.parentNode.insertBefore(notify, list);
           setTimeout(function () {
             if (notify.parentNode) notify.remove();
@@ -369,7 +376,7 @@
           btn.innerHTML =
             '<svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7Z"/></svg>' +
             ' 메시지 남기기';
-          alert("메시지를 남기지 못했어요. GitHub API rate limit 또는 네트워크 오류일 수 있습니다. 잠시 후 다시 시도해주세요.");
+          alert("메시지를 남기지 못했어요. 네트워크 오류일 수 있습니다. 잠시 후 다시 시도해주세요.");
         });
     });
   }
