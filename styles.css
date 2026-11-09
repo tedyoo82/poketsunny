@@ -864,6 +864,93 @@ body {
   }
 }
 
+/* ============게시판 - 관리자 ============ */
+.board__admin-bar {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.board__admin-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  cursor: pointer;
+  color: var(--ink-dim);
+  transition: all 0.2s ease;
+}
+
+.board__admin-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ink);
+  border-color: var(--violet);
+}
+
+.admin-mode .board__admin-btn {
+  background: rgba(139, 123, 255, 0.15);
+  border-color: var(--violet);
+  color: var(--violet);
+}
+
+.board__admin-badge {
+  display: none;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--violet);
+  background: rgba(139, 123, 255, 0.12);
+  border: 1px solid rgba(139, 123, 255, 0.3);
+  border-radius: 999px;
+  padding: 4px 12px;
+  letter-spacing: 0.02em;
+}
+
+.board__item-actions {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.board__item-head .board__item-time {
+  margin-right: auto;
+}
+
+.board__btn-edit,
+.board__btn-del {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--ink-dim);
+  border-radius: 4px;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.board__btn-edit:hover {
+  color: var(--cyan);
+  background: rgba(103, 232, 249, 0.1);
+}
+
+.board__btn-del:hover {
+  color: var(--pink);
+  background: rgba(255, 105, 180, 0.1);
+}
+
+.board__form-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.board__form-actions .btn--primary {
+  flex: 1;
+}
+
 /* ============ 애니메이션(스크롤) ============ */
 .reveal {
   opacity: 0;

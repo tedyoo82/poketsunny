@@ -241,8 +241,11 @@
     appId: ""
   };
 
+  var ADMIN_PIN = "pokesunny2026"; // 관리자 PIN
   var fbApp = null;
   var fbDb = null;
+  var isAdmin = false;
+  var editingId = null; // 수정 중인 메시지 ID
 
   function initFirebase() {
     if (fbDb) return;
@@ -268,6 +271,72 @@
     return Math.floor(diff / 31536000) + "년 전";
   }
 
+  // --- 관리자 토글 ---
+  function toggleAdmin() {
+    if (isAdmin) {
+      isAdmin = false;
+      localStorage.removeItem("pokesunny_admin");
+      document.body.classList.remove("admin-mode");
+      document.getElementById("admin-badge").style.display = "none";
+      loadMessages();
+      return;
+    }
+    var pin = prompt("관리자 PIN을 입력해주세요:");
+    if (pin === null) return;
+    if (pin === ADMIN_PIN) {
+      isAdmin = true;
+      localStorage.setItem("pokesunny_admin", "1");
+      document.body.classList.add("admin-mode");
+      document.getElementById("admin-badge").style.display = "inline-block";
+      loadMessages();
+    } else {
+      alert("PIN이 올바르지 않아요.");
+    }
+  }
+
+  // --- 메시지 삭제 ---
+  function deleteMessage(id) {
+    if (!confirm("이 메시지를 삭제할까요?")) return;
+    fbDb.ref("messages/" + id).remove()
+      .then(function () {
+        loadMessages();
+      })
+      .catch(function (err) {
+        console.warn("[pokesunny] delete failed:", err);
+        alert("삭제에 실패했어요. 다시 시도해주세요.");
+      });
+  }
+
+  // --- 메시지 수정 (관리자) ---
+  function startEdit(id, name, msg) {
+    var nameInput = document.getElementById("board-name");
+    var msgInput = document.getElementById("board-msg");
+    var btn = document.getElementById("board-submit");
+    var cancelBtn = document.getElementById("board-cancel");
+
+    editingId = id;
+    nameInput.value = name;
+    msgInput.value = msg;
+    btn.innerHTML = '✏️ 수정 저장';
+    cancelBtn.style.display = "inline-block";
+
+    // 폼으로 스크롤
+    document.getElementById("board-form").scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  function cancelEdit() {
+    editingId = null;
+    var form = document.getElementById("board-form");
+    form.reset();
+    var btn = document.getElementById("board-submit");
+    var cancelBtn = document.getElementById("board-cancel");
+    btn.innerHTML =
+      '<svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7Z"/></svg>' +
+      ' 메시지 남기기';
+    cancelBtn.style.display = "none";
+  }
+
+  // --- 메시지 로드 + 렌더링 ---
   function loadMessages() {
     var list = document.getElementById("board-list");
     if (!list) return;
@@ -279,7 +348,6 @@
         list.innerHTML = '<div class="board__empty">아직 메시지가 없어요.<br />첫 번째 메시지를 남겨보세요! ✨</div>';
         return;
       }
-      // 배열로 변환하여 최신순 정렬
       var msgs = Object.keys(data).map(function (key) {
         var m = data[key];
         m._id = key;
@@ -298,15 +366,46 @@
         var time = timeAgo(m.ts);
 
         var el = document.createElement("div");
-        el.className = "board__item";
+        el.className = "board__item" + (isAdmin ? " board__item--admin" : "");
+
+        var actionsHtml = "";
+        if (isAdmin) {
+          actionsHtml =
+            '<div class="board__item-actions">' +
+              '<button class="board__btn-edit" data-id="' + m._id + '" title="수정">' +
+                '<svg viewBox="0 0 24 24" width="14" height="14"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+              '</button>' +
+              '<button class="board__btn-del" data-id="' + m._id + '" title="삭제">' +
+                '<svg viewBox="0 0 24 24" width="14" height="14"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+              '</button>' +
+            '</div>';
+        }
+
         el.innerHTML =
           '<div class="board__item-head">' +
             '<span class="board__item-name">' + escapeHtml(name) + '</span>' +
             '<span class="board__item-time">' + escapeHtml(time) + '</span>' +
+            actionsHtml +
           '</div>' +
           '<p class="board__item-msg">' + escapeHtml(msg) + '</p>';
         list.appendChild(el);
       });
+
+      // 수정/삭제 버튼 이벤트 바인딩
+      if (isAdmin) {
+        list.querySelectorAll(".board__btn-del").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            deleteMessage(btn.getAttribute("data-id"));
+          });
+        });
+        list.querySelectorAll(".board__btn-edit").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var id = btn.getAttribute("data-id");
+            var msgData = data[id];
+            startEdit(id, msgData.name || "방문자", msgData.msg || "");
+          });
+        });
+      }
     }, function (err) {
       console.warn("[pokesunny] messages fetch failed:", err);
       list.innerHTML = '<div class="board__error">메시지를 불러오지 못했어요. 잠시 후 다시 시도해주세요.</div>';
@@ -318,17 +417,29 @@
     var list = document.getElementById("board-list");
     if (!form || !list) return;
 
+    // 저장된 관리자 세션 복원
+    if (localStorage.getItem("pokesunny_admin") === "1") {
+      isAdmin = true;
+      document.body.classList.add("admin-mode");
+      document.getElementById("admin-badge").style.display = "inline-block";
+    }
+
     // 메시지 로드
     loadMessages();
 
-    // 실시간 업데이트 구독
+    // 실시간 업데이트 구독 (child_added + child_changed + child_removed)
     initFirebase();
-    fbDb.ref("messages").on("child_added", function () {
-      // 새 메시지가 추가되면 목록 갱신
+    fbDb.ref("messages").on("value", function () {
       loadMessages();
     });
 
-    // 제출 핸들러
+    // 관리자 토글 버튼
+    var adminBtn = document.getElementById("board-admin-btn");
+    if (adminBtn) {
+      adminBtn.addEventListener("click", toggleAdmin);
+    }
+
+    // 제출 핸들러 (새 메시지 + 수정 저장)
     form.addEventListener("submit", function (e) {
       e.preventDefault();
 
@@ -341,44 +452,60 @@
 
       if (!msg) return;
 
-      // 버튼 비활성화
       btn.disabled = true;
-      btn.innerHTML = '남기는 중…';
+      btn.innerHTML = editingId ? '저장 중…' : '남기는 중…';
 
-      var payload = {
-        name: name,
-        msg: msg,
-        ts: Date.now()
-      };
+      var promise;
+      if (editingId) {
+        // 수정 모드
+        promise = fbDb.ref("messages/" + editingId).set({
+          name: name,
+          msg: msg,
+          ts: Date.now()
+        });
+      } else {
+        // 새 메시지
+        promise = fbDb.ref("messages").push({
+          name: name,
+          msg: msg,
+          ts: Date.now()
+        });
+      }
 
-      fbDb.ref("messages").push(payload)
+      var wasEdit = editingId;
+
+      promise
         .then(function () {
-          // 폼 초기화
           form.reset();
-          // 버튼 복원
+          cancelEdit();
           btn.disabled = false;
           btn.innerHTML =
             '<svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7Z"/></svg>' +
             ' 메시지 남기기';
 
-          // 성공 알림
           var notify = document.createElement("div");
           notify.className = "board__notify";
-          notify.textContent = "✨ 메시지가 남겨졌어요!";
+          notify.textContent = wasEdit ? "✅ 메시지가 수정되었어요!" : "✨ 메시지가 남겨졌어요!";
           list.parentNode.insertBefore(notify, list);
           setTimeout(function () {
             if (notify.parentNode) notify.remove();
           }, 4000);
         })
         .catch(function (err) {
-          console.warn("[pokesunny] message submit failed:", err);
+          console.warn("[pokesunny] submit failed:", err);
           btn.disabled = false;
-          btn.innerHTML =
+          btn.innerHTML = editingId ? '✏️ 수정 저장' :
             '<svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7Z"/></svg>' +
             ' 메시지 남기기';
-          alert("메시지를 남기지 못했어요. 네트워크 오류일 수 있습니다. 잠시 후 다시 시도해주세요.");
+          alert("저장에 실패했어요. 네트워크 오류일 수 있습니다.");
         });
     });
+
+    // 수정 취소 버튼
+    var cancelBtn = document.getElementById("board-cancel");
+    if (cancelBtn) {
+      cancelBtn.addEventListener("click", cancelEdit);
+    }
   }
 
   // init에개시판 추가

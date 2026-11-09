@@ -45,7 +45,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=7" />
+  <link rel="stylesheet" href="styles.css?v=8" />
 </head>
 <body>
   <!-- ===== 배경 장식 ===== -->
@@ -270,6 +270,14 @@
       </div>
 
       <div class="board">
+        <!-- 관리자 버튼 -->
+        <div class="board__admin-bar">
+          <button type="button" class="board__admin-btn" id="board-admin-btn" title="관리자 모드">
+            <svg viewBox="0 0 24 24" width="14" height="14"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+          </button>
+          <span class="board__admin-badge" id="admin-badge" style="display:none">🔑 관리자</span>
+        </div>
+
         <div class="board__list" id="board-list">
           <div class="board__loading">불러오는 중…</div>
         </div>
@@ -283,10 +291,13 @@
             <label for="board-msg">메시지</label>
             <textarea id="board-msg" name="message" placeholder="포케써니에 남기고 싶은 한마디…" maxlength="500" rows="3" required></textarea>
           </div>
-          <button type="submit" class="btn btn--primary" id="board-submit">
-            <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7Z"/></svg>
-            메시지 남기기
-          </button>
+          <div class="board__form-actions">
+            <button type="submit" class="btn btn--primary" id="board-submit">
+              <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7Z"/></svg>
+              메시지 남기기
+            </button>
+            <button type="button" class="btn btn--ghost btn--sm" id="board-cancel" style="display:none">취소</button>
+          </div>
         </form>
       </div>
     </section>
@@ -324,6 +335,6 @@
 
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-  <script src="script.js?v=7"></script>
+  <script src="script.js?v=8"></script>
 </body>
 </html>
