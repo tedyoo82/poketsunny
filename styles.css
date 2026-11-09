@@ -702,7 +702,7 @@ body {
 }
 .vid-card__meta span { white-space: nowrap; }
 
-/* ============留言板(GUESTBOOK) ============ */
+/* ============개시판(GUESTBOOK) ============ */
 .board {
   display: grid;
   grid-template-columns: 1fr 360px;
@@ -849,7 +849,7 @@ body {
   }
 }
 
-/*留言板 반응형 */
+/*개시판 반응형 */
 @media (max-width: 760px) {
   .board {
     grid-template-columns: 1fr;

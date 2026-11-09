@@ -230,7 +230,7 @@
       });
   }
 
-  // ---留言板(GitHub Issues 기반) ---
+  // ---개시판(GitHub Issues 기반) ---
   var GH_REPO = "tedyoo82/poketsunny";
   var GH_API = "https://api.github.com/repos/" + GH_REPO;
   var GH_LABEL = "message";
@@ -374,7 +374,7 @@
     });
   }
 
-  // init에留言板 추가
+  // init에개시판 추가
   var _origInit = init;
   function _extendedInit() {
     _origInit();
