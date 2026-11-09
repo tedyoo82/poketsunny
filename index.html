@@ -45,7 +45,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=4" />
+  <link rel="stylesheet" href="styles.css?v=5" />
 </head>
 <body>
   <!-- ===== 배경 장식 ===== -->
@@ -66,6 +66,7 @@
       <nav class="nav" aria-label="주요 메뉴">
         <a href="#about">소개</a>
         <a href="#content">콘텐츠</a>
+        <a href="#messages">留言板</a>
         <a href="#subscribe">구독</a>
       </nav>
 
@@ -260,6 +261,36 @@
       </div>
     </section>
 
+    <!-- =====留言板(메시지 보드) ===== -->
+    <section class="section" id="messages">
+      <div class="section__head">
+        <span class="eyebrow">GUESTBOOK</span>
+        <h2>방문자留言板</h2>
+        <p class="section__sub">포케써니에 남기고 싶은 한마디를 남겨주세요 📝</p>
+      </div>
+
+      <div class="board">
+        <div class="board__list" id="board-list">
+          <div class="board__loading">불러오는 중…</div>
+        </div>
+
+        <form class="board__form" id="board-form">
+          <div class="board__field">
+            <label for="board-name">이름</label>
+            <input type="text" id="board-name" name="name" placeholder="방문자" maxlength="20" required />
+          </div>
+          <div class="board__field">
+            <label for="board-msg">메시지</label>
+            <textarea id="board-msg" name="message" placeholder="포케써니에 남기고 싶은 한마디…" maxlength="500" rows="3" required></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary" id="board-submit">
+            <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7Z"/></svg>
+            메시지 남기기
+          </button>
+        </form>
+      </div>
+    </section>
+
     <!-- ===== 구독 ===== -->
     <section class="section section--cta" id="subscribe">
       <div class="cta">
@@ -291,6 +322,6 @@
     </div>
   </footer>
 
-  <script src="script.js?v=4"></script>
+  <script src="script.js?v=5"></script>
 </body>
 </html>

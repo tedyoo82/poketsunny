@@ -230,9 +230,160 @@
       });
   }
 
+  // ---留言板(GitHub Issues 기반) ---
+  var GH_REPO = "tedyoo82/poketsunny";
+  var GH_API = "https://api.github.com/repos/" + GH_REPO;
+  var GH_LABEL = "message";
+
+  function escapeHtml(str) {
+    var div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function timeAgo(isoStr) {
+    var date = new Date(isoStr);
+    var now = new Date();
+    var diff = Math.floor((now - date) / 1000);
+    if (diff < 60) return "방금 전";
+    if (diff < 3600) return Math.floor(diff / 60) + "분 전";
+    if (diff < 86400) return Math.floor(diff / 3600) + "시간 전";
+    if (diff < 2592000) return Math.floor(diff / 86400) + "일 전";
+    if (diff < 31536000) return Math.floor(diff / 2592000) + "개월 전";
+    return Math.floor(diff / 31536000) + "년 전";
+  }
+
+  function loadMessages() {
+    var list = document.getElementById("board-list");
+    if (!list) return;
+
+    fetch(GH_API + "/issues?labels=" + GH_LABEL + "&state=all&per_page=50&sort=created&direction=desc", {
+      cache: "no-store"
+    })
+      .then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then(function (issues) {
+        // 라벨이 message인 것만 필터링
+        var msgs = issues.filter(function (iss) {
+          return iss.labels && iss.labels.some(function (l) {
+            return l.name === GH_LABEL;
+          });
+        });
+
+        if (msgs.length === 0) {
+          list.innerHTML = '<div class="board__empty">아직 메시지가 없어요.<br />첫 번째 메시지를 남겨보세요! ✨</div>';
+          return;
+        }
+
+        list.innerHTML = "";
+        msgs.forEach(function (iss) {
+          // title: 이름, body: 메시지
+          var name = iss.title || "방문자";
+          var msg = iss.body || "";
+          var time = timeAgo(iss.created_at);
+
+          var el = document.createElement("div");
+          el.className = "board__item";
+          el.innerHTML =
+            '<div class="board__item-head">' +
+              '<span class="board__item-name">' + escapeHtml(name) + '</span>' +
+              '<span class="board__item-time">' + escapeHtml(time) + '</span>' +
+            '</div>' +
+            '<p class="board__item-msg">' + escapeHtml(msg) + '</p>';
+          list.appendChild(el);
+        });
+      })
+      .catch(function (err) {
+        console.warn("[pokesunny] messages fetch failed:", err);
+        list.innerHTML = '<div class="board__error">메시지를 불러오지 못했어요. 잠시 후 다시 시도해주세요.</div>';
+      });
+  }
+
+  function initBoard() {
+    var form = document.getElementById("board-form");
+    var list = document.getElementById("board-list");
+    if (!form || !list) return;
+
+    // 메시지 로드
+    loadMessages();
+
+    // 제출 핸들러
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      var nameInput = document.getElementById("board-name");
+      var msgInput = document.getElementById("board-msg");
+      var btn = document.getElementById("board-submit");
+
+      var name = nameInput.value.trim() || "방문자";
+      var msg = msgInput.value.trim();
+
+      if (!msg) return;
+
+      // 버튼 비활성화
+      btn.disabled = true;
+      btn.innerHTML = '남기는 중…';
+
+      fetch(GH_API + "/issues", {
+        method: "POST",
+        headers: {
+          "Accept": "application/vnd.github+json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          title: name,
+          body: msg,
+          labels: [GH_LABEL]
+        })
+      })
+        .then(function (r) {
+          if (!r.ok) throw new Error("HTTP " + r.status);
+          return r.json();
+        })
+        .then(function (issue) {
+          // 폼 초기화
+          form.reset();
+          // 메시지 목록 다시 로드
+          loadMessages();
+          // 버튼 복원
+          btn.disabled = false;
+          btn.innerHTML =
+            '<svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7Z"/></svg>' +
+            ' 메시지 남기기';
+
+          // 성공 알림 (일시적으로)
+          var orig = list.innerHTML;
+          var notify = document.createElement("div");
+          notify.className = "board__notify";
+          notify.textContent = "✨ 메시지가 남겨졌어요! (GitHub Issues에 저장됨)";
+          list.parentNode.insertBefore(notify, list);
+          setTimeout(function () {
+            if (notify.parentNode) notify.remove();
+          }, 4000);
+        })
+        .catch(function (err) {
+          console.warn("[pokesunny] message submit failed:", err);
+          btn.disabled = false;
+          btn.innerHTML =
+            '<svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7Z"/></svg>' +
+            ' 메시지 남기기';
+          alert("메시지를 남기지 못했어요. GitHub API rate limit 또는 네트워크 오류일 수 있습니다. 잠시 후 다시 시도해주세요.");
+        });
+    });
+  }
+
+  // init에留言板 추가
+  var _origInit = init;
+  function _extendedInit() {
+    _origInit();
+    initBoard();
+  }
+
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener("DOMContentLoaded", _extendedInit);
   } else {
-    init();
+    _extendedInit();
   }
 })();
