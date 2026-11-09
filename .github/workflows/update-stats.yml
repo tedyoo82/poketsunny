@@ -1,9 +1,9 @@
 name: Update YouTube Stats
 
-# 매일 09:00 UTC (한국 18:00) 자동 실행
+# 15분마다 자동 실행
 on:
   schedule:
-    - cron: "0 9 * * *"
+    - cron: "*/15 * * * *"
   workflow_dispatch:
 
 jobs:
