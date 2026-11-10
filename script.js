@@ -26,7 +26,8 @@
 
   // stats.json에서 실시간 통계 로드 (GitHub Actions에서 매일 갱신)
   function loadStats(callback) {
-    fetch("stats.json", { cache: "no-store" })
+    var cacheBust = "_t=" + Date.now();
+    fetch("stats.json?" + cacheBust, { cache: "no-store" })
       .then(function (r) {
         if (!r.ok) throw new Error(r.status);
         return r.json();
@@ -212,7 +213,8 @@
       }
     }
 
-    fetch("recent_videos.json", { cache: "no-store" })
+    var cacheBust = "_t=" + Date.now();
+    fetch("recent_videos.json?" + cacheBust, { cache: "no-store" })
       .then(function (r) {
         if (!r.ok) throw new Error(r.status);
         return r.json();
