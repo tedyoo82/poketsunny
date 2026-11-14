@@ -20,21 +20,22 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Fetch channel stats & recent videos
+      - name: Fetch channel stats & recent videos & news
         run: |
           python3 fetch_stats.py
           python3 fetch_videos.py
+          python3 fetch_news.py
 
-      - name: Commit & push stats.json & recent_videos.json
+      - name: Commit & push stats.json, recent_videos.json & news.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add stats.json recent_videos.json
+          git add stats.json recent_videos.json news.json
           if git diff --cached --quiet; then
             echo "No changes"
           else
-            git commit -m "chore: update YouTube stats & videos ($(date -u +%Y-%m-%dT%H:%M:%SZ))"
+            git commit -m "chore: update YouTube stats, videos & news ($(date -u +%Y-%m-%dT%H:%M:%SZ))"
             git push "https://${GITHUB_TOKEN}@github.com/tedyoo82/poketsunny.git" HEAD:main
           fi

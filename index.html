@@ -45,7 +45,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=9" />
+  <link rel="stylesheet" href="styles.css?v=10" />
 </head>
 <body>
   <!-- ===== 배경 장식 ===== -->
@@ -64,6 +64,7 @@
       </a>
 
       <nav class="nav" aria-label="주요 메뉴">
+        <a href="#news">뉴스</a>
         <a href="#about">소개</a>
         <a href="#content">콘텐츠</a>
         <a href="#messages">게시판</a>
@@ -121,6 +122,21 @@
           <dd class="stat__num visit-badge">0</dd>
         </div>
       </dl>
+    </section>
+
+    <!-- ===== Pokémon GO 공식 뉴스 ===== -->
+    <section class="section" id="news">
+      <div class="section__head">
+        <span class="eyebrow">NEWS</span>
+        <h2>Pokémon GO 공식 뉴스</h2>
+        <a class="section__more" href="https://pokemongolive.com/news" target="_blank" rel="noopener">
+          공식 뉴스 사이트
+          <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+      <div class="news-grid" id="news-grid">
+        <div class="news-grid__loading">불러오는 중…</div>
+      </div>
     </section>
 
     <!-- ===== 최근 영상 ===== -->
@@ -335,6 +351,6 @@
 
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-  <script src="script.js?v=10"></script>
+  <script src="script.js?v=11"></script>
 </body>
 </html>

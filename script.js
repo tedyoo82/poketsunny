@@ -120,6 +120,9 @@
     // 최근 영상 로드
     loadVideos();
 
+    // Pokémon GO 뉴스 로드
+    loadNews();
+
     // stats.json 로드 → data-count 갱신
     loadStats(function (stats) {
       if (!stats) return; // 폴백: HTML 기본값 사용
@@ -228,6 +231,83 @@
       })
       .catch(function (err) {
         console.warn("[pokesunny] recent_videos.json fetch failed, using fallback:", err);
+        render(FALLBACK);
+      });
+  }
+
+  // --- Pokémon GO 뉴스 렌더링 ---
+  function loadNews() {
+    var grid = document.getElementById("news-grid");
+    if (!grid) return;
+
+    var FALLBACK = [
+      { url: "https://pokemongolive.com/news/", title: "Pokémon GO News", title_ko: "포켓몬GO 뉴스", summary: "Latest Pokémon GO news and updates.", image: "", published: "2026-11-14" },
+    ];
+
+    function render(news) {
+      grid.innerHTML = "";
+      news.forEach(function (n) {
+        var a = document.createElement("a");
+        a.className = "news-card";
+        a.href = n.url || "#";
+        a.target = "_blank";
+        a.rel = "noopener";
+
+        var pubDate = n.published ? new Date(n.published).toLocaleDateString("ko-KR") : "";
+
+        a.innerHTML =
+          (n.image ? '<div class="news-card__thumb">' +
+            '<img src="' + n.image + '" alt="" loading="lazy" />' +
+          '</div>' : '') +
+          '<div class="news-card__body">' +
+            '<h3 class="news-card__title">' + escapeHtml(n.title) + '</h3>' +
+            (n.title_ko ? '<p class="news-card__title-ko">' + escapeHtml(n.title_ko) + '</p>' : '') +
+            (n.summary ? '<p class="news-card__summary">' + escapeHtml(n.summary) + '</p>' : '') +
+            (n.summary_ko ? '<p class="news-card__summary-ko">' + escapeHtml(n.summary_ko) + '</p>' : '') +
+            '<div class="news-card__meta">' +
+              (pubDate ? '<span>' + pubDate + '</span>' : '') +
+            '</div>' +
+          '</div>';
+
+        grid.appendChild(a);
+      });
+
+      // 렌더링 후 reveal class 적용
+      addRevealClass();
+      if ("IntersectionObserver" in window) {
+        var io2 = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              io2.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.15 });
+        grid.querySelectorAll(".news-card").forEach(function (el) {
+          io2.observe(el);
+        });
+      } else {
+        grid.querySelectorAll(".news-card").forEach(function (el) {
+          el.classList.add("is-visible");
+        });
+      }
+    }
+
+    var cacheBust = "_t=" + Date.now();
+    fetch("news.json?" + cacheBust, { cache: "no-store" })
+      .then(function (r) {
+        if (!r.ok) throw new Error(r.status);
+        return r.json();
+      })
+      .then(function (news) {
+        if (Array.isArray(news) && news.length > 0) {
+          render(news);
+        } else {
+          render(FALLBACK);
+        }
+      })
+      .catch(function (err) {
+        console.warn("[pokesunny] news.json fetch failed, using fallback:", err);
         render(FALLBACK);
       });
   }
