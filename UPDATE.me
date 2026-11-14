@@ -1,0 +1,174 @@
+# PoketSunny (Poke_Sunny) — 업데이트 내역
+
+---
+
+## 📅 2026-11-14 (오늘)
+
+### 뉴스 소스 한국어로 전환
+-pokemongo.com/ko/news 크롤링 스크립트(`fetch_news.py`) 제작
+  - HTML entity 디코딩(`&quot;` → `"`) 적용
+  - Regex 패턴 수정(`<a[^>]*href` → `<a[^>]+href>`)
+  - 첫 번째 문단(>30자)을 요약으로 추출, 200자 제한 + "..." truncate
+  - 최대 20개 문단(>15자)을 본문으로 추출
+  - URL 기준 중복 제거
+  - 번역 제거 — 한국어 원문만 처리
+- `news.json` — 6개 한국어 뉴스 항목으로 갱신
+- `news-detail.html` — 한국어 전용 상세 페이지
+- `script.js` — 이중 언어 참조 제거, 캐시 버스트(`?_t=`) 적용
+- `styles.css` — 이중 언어 카드 스타일 제거
+- `index.html` — 뉴스 소스 링크를 pokemongo.com/ko로 변경
+
+### YouTube 통계 API v3로 전환
+- `fetch_stats.py` — YouTube Data API v3로 변경
+  - Channel ID: `UCf5ymFUkRYToCRFqeYmgsFg` (Poke_Sunny)
+  - API 키: `AIzaSyB_H4QQay9aXrXAfvjlt3Aodw0jBx6-K9M`
+  - Referer 헤더(`https://pokesunny.com/`) 필수
+  - 구독자, 영상 수, 총 조회수 실시간 조회
+- `stats.json` — API v3 형식으로 갱신
+
+### 모바일 캐시 문제 해결
+- `_headers` 파일 생성 — GitHub Pages Cache-Control 적용
+  - JSON 파일(`*.json`) → `no-store` (항상 최신 데이터)
+  - HTML/CSS/JS → `max-age=3600` (1시간)
+- YouTube 통계가 모바일에서 stale하게 보이던 문제 해결
+
+### CI/CD 자동화 (15분마다)
+- `.github/workflows/update-stats.yml` — `*/15 * * * *` (15분마다 실행)
+  - `fetch_stats.py`, `fetch_videos.py`, `fetch_news.py` 자동 실행
+  - 실행 전·후 데이터 로그로 디버깅 용이
+  - 변경사항 자동 커밋 & 푸시
+- `translation_cache.json` 삭제 (번역 기능 제거)
+
+---
+
+## 📅 2026-11-13
+
+- GitHub Actions로 YouTube 통계·영상 자동 업데이트 지속
+
+---
+
+## 📅 2026-11-12
+
+- GitHub Actions로 YouTube 통계·영상 자동 업데이트 지속
+
+---
+
+## 📅 2026-11-11
+
+- GitHub Actions로 YouTube 통계·영상 자동 업데이트 지속
+
+---
+
+## 📅 2026-11-10
+
+- `fetch_videos.py` — YouTube 최근 영상 크롤링 스크립트
+- `recent_videos.json` — 최근 영상 데이터 (자동 갱신)
+- 캐시 버스트(`?_t=` timestamp)로 JSON fetch 항상 최신 데이터 보장
+- GitHub Actions로 YouTube 통계·영상 자동 업데이트 지속
+
+---
+
+## 📅 2026-11-09
+
+### 게시판 (Guestbook)
+- Firebase Realtime Database로 게시판 전환 (기존 GitHub Issues → Firebase)
+  - 프로젝트: `pokesunny-guestbook`
+  - DB URL: `https://pokesunny-guestbook-default-rtdb.firebaseio.com`
+- 관리자 모드 — PIN(`pokesunny2026`)으로 인증
+  - 전체 메시지 수정/삭제 기능
+- 중국어 문자 제거, 한국어 게시판으로 변경
+- 이름 수정 시 "방문자개시판" → "방문자게시판" 오타 수정
+
+### 자동화
+- GitHub Actions 업데이트 주기 15분으로 단축 (`*/15 * * * *`)
+
+---
+
+## 📅 2026-11-08
+
+- YouTube 최근 영상 섹션 추가 — 자동 업데이트 영상 그리드
+
+---
+
+## 📅 2026-11-07
+
+### 도메인 설정
+- 커스텀 도메인 `pokesunny.com` 적용 (CNAME 설정)
+- 모든 URL을 `pokesunny.com`으로 업데이트
+
+### SEO
+- `sitemap.xml` 생성
+- `robots.txt` 생성 (Naver Yeti 봇 포함)
+- OG 태그, canonical URL, 구조화 데이터(Schema.org) 추가
+
+### 방문자 카운터
+- `countapi.xyz` → `countapi.mileshilliard.com`으로 교체 (구 서비스 종료)
+- fetch 실패 시에도 숫자 표시 유지
+- 방문자 숫자 스타일 통일
+
+### 기타
+- 캐시 버스트 `?v=2` 추가
+- Naver 사이트 인증 파일 추가 (`naver2d9b18356a8efadc744ddad4dab33efa.html`)
+- SNS 홍보용 복사 작성 (`promo/README.md`)
+
+---
+
+## 📅 2026-11-06
+
+### 프로젝트 초기 설정
+- GitHub Actions 자동 통계 갱신 워크플로우 생성
+- YouTube 통계 자동 업데이트 스크립트 (`fetch_stats.py`)
+- GITHUB_TOKEN 권한 설정 (contents write)
+- git push 토큰 포함 URL 방식으로 변경
+- 무한 루프 방지 로직 추가
+
+---
+
+## 📊 주요 파일 구조
+
+```
+PoketSunny/
+├── index.html              # 메인 페이지
+├── news-detail.html        # 뉴스 상세 페이지
+├── script.js               # 클라이언트 사이드 스크립트
+├── styles.css              # 스타일 시트
+├── fetch_news.py           # pokemongo.com/ko/news 크롤러
+├── fetch_stats.py          # YouTube Data API v3 통계Fetcher
+├── fetch_videos.py         # YouTube 최근 영상 크롤러
+├── news.json               # 뉴스 데이터 (자동 갱신)
+├── stats.json              # YouTube 채널 통계 (자동 갱신)
+├── recent_videos.json      # 최근 영상 데이터 (자동 갱신)
+├── _headers                # GitHub Pages Cache-Control
+├── CNAME                   # pokesunny.com 도메인
+├── sitemap.xml             # SEO 사이트맵
+├── robots.txt              # 검색 엔진 로봇 지침
+├── naver2d9b18356a8efadc744ddad4dab33efa.html  # Naver 인증
+├── promo/                  # SNS 홍보 자료
+└── .github/workflows/
+    └── update-stats.yml    # 15분마다 자동 업데이트
+```
+
+---
+
+## 🔧 기술 스택
+
+- **호스팅**: GitHub Pages
+- **도메인**: pokesunny.com
+- **자동화**: GitHub Actions (15분마다)
+- **데이터**: Python (urllib only — 외부 의존성 없음)
+- **게시판**: Firebase Realtime Database
+- **방문자 카운터**: countapi.mileshilliard.com
+- **YouTube API**: Data API v3
+- **뉴스 소스**: pokemongo.com/ko/news
+
+---
+
+## 🚀 향후 계획 (토의 중)
+
+1. **라이딩 팀 빌더** — Pokemon GO 라이딩 매칭
+2. **이벤트 캘린더** — Pokemon GO 이벤트 일정
+3. **포켓몬 데이터베이스** — 포켓몬 정보 조회
+
+---
+
+*최종 업데이트: 2026-11-14*
