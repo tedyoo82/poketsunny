@@ -662,13 +662,6 @@ body {
 }
 .news-card:hover .news-card__title { color: var(--violet); }
 
-.news-card__title-ko {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--ink-soft);
-  margin-bottom: 8px;
-}
-
 .news-card__summary {
   font-size: 0.82rem;
   color: var(--ink-dim);
@@ -678,18 +671,6 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
   margin-bottom: 10px;
-}
-
-.news-card__summary-ko {
-  font-size: 0.8rem;
-  color: var(--ink-soft);
-  line-height: 1.55;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  margin-bottom: 10px;
-  font-style: italic;
 }
 
 .news-card__meta {

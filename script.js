@@ -241,7 +241,7 @@
     if (!grid) return;
 
     var FALLBACK = [
-      { url: "https://pokemongolive.com/news/", title: "Pokémon GO News", title_ko: "포켓몬GO 뉴스", summary: "Latest Pokémon GO news and updates.", image: "", published: "2026-11-14" },
+      { url: "https://pokemongo.com/ko/news/", title: "Pokémon GO 뉴스", summary: "Pokémon GO 공식 한국어 뉴스입니다.", image: "", published: "2026-11-14" },
     ];
 
     function render(news) {
@@ -249,8 +249,8 @@
       news.forEach(function (n) {
         var a = document.createElement("a");
         a.className = "news-card";
-        a.href = n.url || "#";
-        a.target = "_blank";
+        a.href = "news-detail.html?url=" + encodeURIComponent(n.url);
+        a.target = "";
         a.rel = "noopener";
 
         var pubDate = n.published ? new Date(n.published).toLocaleDateString("ko-KR") : "";
@@ -261,9 +261,7 @@
           '</div>' : '') +
           '<div class="news-card__body">' +
             '<h3 class="news-card__title">' + escapeHtml(n.title) + '</h3>' +
-            (n.title_ko ? '<p class="news-card__title-ko">' + escapeHtml(n.title_ko) + '</p>' : '') +
             (n.summary ? '<p class="news-card__summary">' + escapeHtml(n.summary) + '</p>' : '') +
-            (n.summary_ko ? '<p class="news-card__summary-ko">' + escapeHtml(n.summary_ko) + '</p>' : '') +
             '<div class="news-card__meta">' +
               (pubDate ? '<span>' + pubDate + '</span>' : '') +
             '</div>' +
