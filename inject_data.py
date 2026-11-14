@@ -44,23 +44,33 @@ def main():
         f'<script id="inline-news" type="application/json">{news_js}</script>\n'
     )
 
-    if '<script id="inline-data"' in html:
-        # 기존 inline-data ~ /script> 블록을 교체
-        html = re.sub(
-            r'<script id="inline-data".*?</script>\s*'
-            r'<script id="inline-videos".*?</script>\s*'
-            r'<script id="inline-news".*?</script>',
-            inline_block.strip(),
-            html,
-            flags=re.DOTALL,
-        )
-    else:
-        # Firebase script 직전에 삽입
-        html = html.replace(
-            '<script src="https://www.gstatic.com/firebasejs/',
-            inline_block
-            + '  <script src="https://www.gstatic.com/firebasejs/',
-        )
+    # 기존 inline 블록 모두 제거 (중복 방지)
+    html = re.sub(
+        r'<script id="inline-data"[^>]*>.*?</script>\s*',
+        "",
+        html,
+        flags=re.DOTALL,
+    )
+    html = re.sub(
+        r'<script id="inline-videos"[^>]*>.*?</script>\s*',
+        "",
+        html,
+        flags=re.DOTALL,
+    )
+    html = re.sub(
+        r'<script id="inline-news"[^>]*>.*?</script>\s*',
+        "",
+        html,
+        flags=re.DOTALL,
+    )
+
+    # Firebase script 직전에 새 데이터 삽입 (첫 번째 위치에만)
+    html = html.replace(
+        '<script src="https://www.gstatic.com/firebasejs/',
+        inline_block
+        + '  <script src="https://www.gstatic.com/firebasejs/',
+        1,
+    )
 
     # data-count attributes 업데이트 (히어로 통계)
     # 구독자 (첫 번째 stat__num)
