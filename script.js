@@ -24,20 +24,16 @@
       });
   }
 
-  // stats.json에서 실시간 통계 로드 (GitHub Actions에서 매일 갱신)
-  function loadStats(callback) {
-    fetch("stats.json?_r=" + Math.random(), { cache: "no-store" })
-      .then(function (r) {
-        if (!r.ok) throw new Error(r.status);
-        return r.json();
-      })
-      .then(function (stats) {
-        callback(stats);
-      })
-      .catch(function () {
-        // fetch 실패 → HTML에 있는 기본값 그대로 사용
-        callback(null);
-      });
+  // --- inline data 읽기 (GitHub Actions이 HTML에 임베드) ---
+  function getInlineData(id, fallback) {
+    var el = document.getElementById(id);
+    if (!el) return fallback;
+    try {
+      return JSON.parse(el.textContent);
+    } catch (e) {
+      console.warn("[pokesunny] failed to parse #" + id + ":", e);
+      return fallback;
+    }
   }
 
   // --- 숫자 카운트업 (히어로 통계) ---
@@ -122,9 +118,9 @@
     // Pokémon GO 뉴스 로드
     loadNews();
 
-    // stats.json 로드 → data-count 갱신
-    loadStats(function (stats) {
-      if (!stats) return; // 폴백: HTML 기본값 사용
+    // stats inline data → data-count 갱신
+    var stats = getInlineData("inline-data", null);
+    if (stats) {
       var mapping = {
         subscribers: counters[0],
         videos: counters[1],
@@ -141,7 +137,7 @@
           }
         }
       });
-    });
+    }
   }
 
   function addRevealClass() {
@@ -215,22 +211,13 @@
       }
     }
 
-    fetch("recent_videos.json?_r=" + Math.random(), { cache: "no-store" })
-      .then(function (r) {
-        if (!r.ok) throw new Error(r.status);
-        return r.json();
-      })
-      .then(function (videos) {
-        if (Array.isArray(videos) && videos.length > 0) {
-          render(videos);
-        } else {
-          render(FALLBACK);
-        }
-      })
-      .catch(function (err) {
-        console.warn("[pokesunny] recent_videos.json fetch failed, using fallback:", err);
-        render(FALLBACK);
-      });
+    var videos = getInlineData("inline-videos", null);
+    if (Array.isArray(videos) && videos.length > 0) {
+      render(videos);
+    } else {
+      console.warn("[pokesunny] inline-videos not found, using fallback");
+      render(FALLBACK);
+    }
   }
 
   // --- Pokémon GO 뉴스 렌더링 ---
@@ -289,22 +276,13 @@
       }
     }
 
-    fetch("news.json?_r=" + Math.random(), { cache: "no-store" })
-      .then(function (r) {
-        if (!r.ok) throw new Error(r.status);
-        return r.json();
-      })
-      .then(function (news) {
-        if (Array.isArray(news) && news.length > 0) {
-          render(news);
-        } else {
-          render(FALLBACK);
-        }
-      })
-      .catch(function (err) {
-        console.warn("[pokesunny] news.json fetch failed, using fallback:", err);
-        render(FALLBACK);
-      });
+    var news = getInlineData("inline-news", null);
+    if (Array.isArray(news) && news.length > 0) {
+      render(news);
+    } else {
+      console.warn("[pokesunny] inline-news not found, using fallback");
+      render(FALLBACK);
+    }
   }
 
   // ---게시판(Firebase Realtime Database 기반) ---
@@ -585,7 +563,7 @@
     }
   }
 
-  // init에개시판 추가
+  // init에 개시판 추가
   var _origInit = init;
   function _extendedInit() {
     _origInit();
