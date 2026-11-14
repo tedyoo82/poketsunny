@@ -1,0 +1,30 @@
+# JSON 데이터 파일 — 캐시 없이 매번 새로 고침 (모바일 Safari/Chrome 대응)
+/stats.json
+  Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+/recent_videos.json
+  Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+/news.json
+  Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+/news-detail.html
+  Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+# HTML/CSS/JS — 짧은 캐시 (1시간)
+/index.html
+  Cache-Control: max-age=3600, must-revalidate
+
+/script.js
+  Cache-Control: max-age=3600, must-revalidate
+
+/styles.css
+  Cache-Control: max-age=3600, must-revalidate

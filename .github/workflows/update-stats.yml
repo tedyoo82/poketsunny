@@ -22,9 +22,18 @@ jobs:
 
       - name: Fetch channel stats & recent videos & news
         run: |
-          python3 fetch_stats.py
-          python3 fetch_videos.py
-          python3 fetch_news.py
+          echo "=== Before fetch ===" >&2
+          cat stats.json 2>/dev/null || echo "stats.json not found" >&2
+          cat recent_videos.json 2>/dev/null || echo "recent_videos.json not found" >&2
+          echo "" >&2
+
+          python3 fetch_stats.py || echo "ERROR: fetch_stats.py failed" >&2
+          python3 fetch_videos.py || echo "ERROR: fetch_videos.py failed" >&2
+          python3 fetch_news.py || echo "ERROR: fetch_news.py failed" >&2
+
+          echo "=== After fetch ===" >&2
+          cat stats.json 2>/dev/null || echo "stats.json not found" >&2
+          cat recent_videos.json 2>/dev/null || echo "recent_videos.json not found" >&2
 
       - name: Commit & push stats.json, recent_videos.json & news.json
         env:
@@ -32,9 +41,9 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add stats.json recent_videos.json news.json
+          git add stats.json recent_videos.json news.json _headers
           if git diff --cached --quiet; then
-            echo "No changes"
+            echo "No data changes"
           else
             git commit -m "chore: update YouTube stats, videos & news ($(date -u +%Y-%m-%dT%H:%M:%SZ))"
             git push "https://${GITHUB_TOKEN}@github.com/tedyoo82/poketsunny.git" HEAD:main
