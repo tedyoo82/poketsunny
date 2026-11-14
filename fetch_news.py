@@ -12,6 +12,7 @@ Pokemon GO 코리아 공식 뉴스 스크래퍼
 
 import re
 import json
+import html as html_util
 import sys
 import urllib.request
 from datetime import datetime, timezone
@@ -45,7 +46,7 @@ def extract_article_body(url: str) -> str:
         paragraphs = re.findall(r'<p[^>]*>(.*?)</p>', content_area, re.DOTALL)
         texts = []
         for p in paragraphs:
-            text = re.sub(r'<[^>]+>', '', p).strip()
+            text = html_util.unescape(re.sub(r'<[^>]+>', '', p).strip())
             if text and len(text) > 15:
                 texts.append(text)
         # 본문은 첫 20개 단락까지 (footer 제외)
@@ -67,7 +68,7 @@ def extract_article_summary(url: str) -> str:
         paragraphs = re.findall(r'<p[^>]*>(.*?)</p>', content_area, re.DOTALL)
         texts = []
         for p in paragraphs:
-            text = re.sub(r'<[^>]+>', '', p).strip()
+            text = html_util.unescape(re.sub(r'<[^>]+>', '', p).strip())
             if text and len(text) > 30:
                 texts.append(text)
         if len(texts) >= 2:
@@ -88,7 +89,7 @@ def extract_news_items(html: str) -> list:
     # pokemongo.com/ko/news 페이지 구조:
     # 뉴스 항목은 <a> 태그로 감싸져 있고 href="/ko/news/..." 패턴을 가짐
     news_blocks = re.findall(
-        r'<a[^>]*href=["\'](/ko/news/[^"\']+)[^>]*>(.*?)</a>',
+        r'<a[^>]+href=["\'](/ko/news/[^"\']+)[^>]*>(.*?)</a>',
         html,
         re.DOTALL
     )
@@ -126,7 +127,7 @@ def extract_news_items(html: str) -> list:
             block, re.DOTALL
         )
         if title_match:
-            title = re.sub(r'<[^>]+>', '', title_match.group(1)).strip()
+            title = html_util.unescape(re.sub(r'<[^>]+>', '', title_match.group(1)).strip())
 
         if title or link:
             news.append({
