@@ -66,7 +66,7 @@ def main():
     # 구독자 (첫 번째 stat__num)
     if "subscribers" in stats and stats["subscribers"]:
         html = re.sub(
-            r'(class="stat__num" data-count=")\d+(\s*>)',
+            r'(class="stat__num" data-count=")\d+(">)',
             lambda m: m.group(1) + str(stats["subscribers"]) + m.group(2),
             html,
             count=1,
@@ -74,7 +74,7 @@ def main():
     # 동영상 (두 번째 stat__num)
     if "videos" in stats and stats["videos"]:
         matches = list(
-            re.finditer(r'(class="stat__num" data-count=")\d+(\s*>)', html)
+            re.finditer(r'(class="stat__num" data-count=")\d+(">)', html)
         )
         if len(matches) >= 2:
             m = matches[1]
@@ -88,7 +88,7 @@ def main():
     # 조회수 (세 번째 stat__num)
     if "views" in stats and stats["views"]:
         matches = list(
-            re.finditer(r'(class="stat__num" data-count=")\d+(\s*>)', html)
+            re.finditer(r'(class="stat__num" data-count=")\d+(">)', html)
         )
         if len(matches) >= 3:
             m = matches[2]
