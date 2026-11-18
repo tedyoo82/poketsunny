@@ -682,6 +682,117 @@ body {
 }
 .news-card__meta span { white-space: nowrap; }
 
+/* ============ 이벤트 캘린더 ============ */
+
+/* NOW EVENT 섹션 */
+.event-now {
+  margin-bottom: 24px;
+}
+
+.event-now__label {
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--cyan);
+  margin-bottom: 10px;
+}
+
+.event-now__card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+}
+
+.event-now__loading {
+  text-align: center;
+  color: var(--ink-dim);
+  font-size: 0.95rem;
+}
+
+.event-now__name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.event-now__dates {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  font-family: var(--font-en);
+}
+
+/* UPCOMING EVENTS 섹션 */
+.event-upcoming {
+  margin-bottom: 20px;
+}
+
+.event-upcoming__label {
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--ink-dim);
+  margin-bottom: 12px;
+}
+
+.event-list {
+  display: grid;
+  gap: 8px;
+}
+
+.event-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  color: var(--ink);
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.event-row:hover {
+  background: var(--card-hover);
+}
+
+.event-row__date {
+  font-family: var(--font-en);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink-dim);
+  white-space: nowrap;
+  min-width: 52px;
+}
+
+.event-row__emoji {
+  font-size: 1rem;
+  min-width: 24px;
+  text-align: center;
+}
+
+.event-row__name {
+  flex: 1;
+  color: var(--ink);
+}
+
+.event-all-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--cyan);
+  text-decoration: none;
+  padding: 8px 0;
+  transition: color 0.2s, gap 0.2s;
+}
+
+.event-all-link:hover { color: var(--ink); gap: 10px; }
+.event-all-link .ic { width: 0.9em; height: 0.9em; }
+
 /* ============ 최근 영상 ============ */
 .section__head {
   position: relative;

@@ -118,6 +118,9 @@
     // Pokémon GO 뉴스 로드
     loadNews();
 
+    // Pokémon GO 이벤트 로드
+    loadEvents();
+
     // stats inline data → data-count 갱신
     var stats = getInlineData("inline-data", null);
     if (stats) {
@@ -216,6 +219,192 @@
       render(videos);
     } else {
       console.warn("[pokesunny] inline-videos not found, using fallback");
+      render(FALLBACK);
+    }
+  }
+
+  // --- Pokémon GO 이벤트 렌더링 ---
+  var EVENT_TYPE_LABELS = {
+    community: "커뮤니티",
+    raid: "레이드",
+    supermega: "슈퍼메가",
+    hatch: "부화",
+    maxbattle: "맥스배틀",
+    wildweek: "와일드 위크",
+    research: "리서치",
+    store: "스토어",
+    season: "시즌",
+    collab: "컬라보",
+    special: "특별",
+    wildarea: "와일드 에리어",
+    unknown: "기타",
+  };
+
+  function loadEvents() {
+    var nowEl = document.getElementById("event-now-card");
+    var listEl = document.getElementById("event-list");
+    if (!nowEl || !listEl) return;
+
+    var FALLBACK = [
+      {
+        url: "https://pokemongo.com/ko/news/",
+        name: "Pokémon GO 공식 이벤트 확인하기",
+        type: "special",
+        dates: [],
+        summary: "공식 이벤트 페이지에서 최신 정보를 확인하세요.",
+        image: "",
+      },
+    ];
+
+    // 이벤트 타입 → 이모지 매핑
+    var TYPE_EMOJI = {
+      community: "🟢",
+      raid: "🔴",
+      supermega: "🟡",
+      hatch: "🐣",
+      maxbattle: "🟣",
+      wildweek: "🟠",
+      research: "🔵",
+      store: "🟡",
+      season: "💜",
+      collab: "🩵",
+      special: "❄️",
+      unknown: "⚪",
+    };
+
+    function formatDate(dateStr) {
+      if (!dateStr) return "";
+      var parts = dateStr.split("-");
+      if (parts.length === 3) {
+        return parts[1] + "/" + parts[2];
+      }
+      return dateStr;
+    }
+
+    function render(events) {
+      if (!events || events.length === 0) {
+        nowEl.innerHTML = '<div class="event-now__loading">현재 진행 중인 이벤트가 없어요</div>';
+        listEl.innerHTML = "";
+        return;
+      }
+
+      var now = new Date();
+      now.setHours(0, 0, 0, 0);
+
+      var activeEvents = [];
+      var upcomingEvents = [];
+
+      events.forEach(function (ev) {
+        var isFuture = true;
+        if (ev.dates && ev.dates.length > 0) {
+          var endDate = ev.dates[ev.dates.length - 1];
+          var endParts = endDate.split("-");
+          if (endParts.length === 3) {
+            var end = new Date(endParts[0], endParts[1] - 1, endParts[2]);
+            if (end < now) isFuture = false;
+          }
+        }
+        if (isFuture) activeEvents.push(ev);
+      });
+
+      // NOW EVENT: 최신 현재 이벤트 1개
+      if (activeEvents.length > 0) {
+        var current = activeEvents[0];
+        var datesText = "";
+        if (current.dates && current.dates.length > 0) {
+          if (current.dates.length === 1) {
+            datesText = formatDate(current.dates[0]);
+          } else {
+            datesText = formatDate(current.dates[0]) + " ~ " + formatDate(current.dates[current.dates.length - 1]);
+          }
+        }
+
+        nowEl.innerHTML =
+          '<div class="event-now__name">' + escapeHtml(current.name) + '</div>' +
+          '<div class="event-now__dates">현재 진행 중! ' + datesText + "</div>";
+      } else {
+        nowEl.innerHTML = '<div class="event-now__loading">현재 진행 중인 이벤트가 없어요</div>';
+      }
+
+      // UPCOMING: 현재 이벤트를 제외한 미래 이벤트들
+      var upcoming = activeEvents.length > 1 ? activeEvents.slice(1) : events.filter(function (ev) {
+        if (!ev.dates || ev.dates.length === 0) return false;
+        var endDate = ev.dates[ev.dates.length - 1];
+        var endParts = endDate.split("-");
+        if (endParts.length !== 3) return false;
+        var end = new Date(endParts[0], endParts[1] - 1, endParts[2]);
+        return end >= now;
+      });
+
+      // 과거 이벤트도 일정 기간 지난 것만 upcoming에 추가 (다음 이벤트로 표시)
+      if (upcoming.length === 0) {
+        events.forEach(function (ev) {
+          if (!ev.dates || ev.dates.length === 0) return;
+          var endDate = ev.dates[ev.dates.length - 1];
+          var endParts = endDate.split("-");
+          if (endParts.length !== 3) return;
+          var end = new Date(endParts[0], endParts[1] - 1, endParts[2]);
+          var daysSince = (now - end) / (1000 * 60 * 60 * 24);
+          if (daysSince <= 30) {
+            upcoming.push(ev);
+          }
+        });
+      }
+
+      // 이벤트 타입별 이모지 매핑
+      var typeEmoji = {
+        community: "🟢",
+        raid: "🔴",
+        supermega: "🟡",
+        hatch: "🐣",
+        maxbattle: "🟣",
+        wildweek: "🟠",
+        research: "🔵",
+        store: "🟡",
+        season: "💜",
+        collab: "🩵",
+        special: "❄️",
+        unknown: "⚪",
+      };
+
+      listEl.innerHTML = "";
+
+      if (upcoming.length === 0) {
+        listEl.innerHTML = '<div class="event-now__loading">다음 이벤트가 아직 등록되지 않았어요</div>';
+        return;
+      }
+
+      upcoming.forEach(function (ev) {
+        var a = document.createElement("a");
+        a.className = "event-row";
+        a.href = ev.url;
+        a.target = "_blank";
+        a.rel = "noopener";
+
+        var emoji = typeEmoji[ev.type] || "⚪";
+        var datesText = "";
+        if (ev.dates && ev.dates.length > 0) {
+          if (ev.dates.length === 1) {
+            datesText = formatDate(ev.dates[0]);
+          } else {
+            datesText = formatDate(ev.dates[0]) + "~" + formatDate(ev.dates[ev.dates.length - 1]);
+          }
+        }
+
+        a.innerHTML =
+          '<span class="event-row__date">' + datesText + "</span>" +
+          '<span class="event-row__emoji">' + emoji + "</span>" +
+          '<span class="event-row__name">' + escapeHtml(ev.name) + "</span>";
+
+        listEl.appendChild(a);
+      });
+    }
+
+    var events = getInlineData("inline-events", null);
+    if (Array.isArray(events) && events.length > 0) {
+      render(events);
+    } else {
+      console.warn("[pokesunny] inline-events not found, using fallback");
       render(FALLBACK);
     }
   }

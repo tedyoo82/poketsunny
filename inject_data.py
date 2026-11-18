@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""stats.json, recent_videos.json, news.json의 데이터를 index.html에 임베드."""
+"""stats.json, recent_videos.json, news.json, events.json의 데이터를 index.html에 임베드."""
 import json
 import re
 import sys
@@ -28,6 +28,13 @@ def main():
         print(f"news.json 읽기 실패: {e}", file=sys.stderr)
         news = []
 
+    try:
+        with open("events.json", "r", encoding="utf-8") as f:
+            events = json.load(f)
+    except Exception as e:
+        print(f"events.json 읽기 실패: {e}", file=sys.stderr)
+        events = []
+
     # HTML 읽기
     with open("index.html", "r", encoding="utf-8") as f:
         html = f.read()
@@ -36,31 +43,49 @@ def main():
     stats_js = json.dumps(stats, ensure_ascii=False)
     videos_js = json.dumps(videos, ensure_ascii=False)
     news_js = json.dumps(news, ensure_ascii=False)
+    events_js = json.dumps(events, ensure_ascii=False)
 
     # inline-data script 태그 교체 (있으면) 또는 삽입 (없으면)
     inline_block = (
         f'<script id="inline-data" type="application/json">{stats_js}</script>\n'
         f'<script id="inline-videos" type="application/json">{videos_js}</script>\n'
         f'<script id="inline-news" type="application/json">{news_js}</script>\n'
+        f'<script id="inline-events" type="application/json">{events_js}</script>\n'
     )
 
-    if '<script id="inline-data"' in html:
-        # 기존 inline-data ~ /script> 블록을 교체
-        html = re.sub(
-            r'<script id="inline-data".*?</script>\s*'
-            r'<script id="inline-videos".*?</script>\s*'
-            r'<script id="inline-news".*?</script>',
-            inline_block.strip(),
-            html,
-            flags=re.DOTALL,
-        )
-    else:
-        # Firebase script 직전에 삽입
-        html = html.replace(
-            '<script src="https://www.gstatic.com/firebasejs/',
-            inline_block
-            + '  <script src="https://www.gstatic.com/firebasejs/',
-        )
+    # 기존 inline 블록 모두 제거 (중복 방지)
+    html = re.sub(
+        r'<script id="inline-data"[^>]*>.*?</script>\s*',
+        "",
+        html,
+        flags=re.DOTALL,
+    )
+    html = re.sub(
+        r'<script id="inline-videos"[^>]*>.*?</script>\s*',
+        "",
+        html,
+        flags=re.DOTALL,
+    )
+    html = re.sub(
+        r'<script id="inline-news"[^>]*>.*?</script>\s*',
+        "",
+        html,
+        flags=re.DOTALL,
+    )
+    html = re.sub(
+        r'<script id="inline-events"[^>]*>.*?</script>\s*',
+        "",
+        html,
+        flags=re.DOTALL,
+    )
+
+    # Firebase script 직전에 새 데이터 삽입 (첫 번째 위치에만)
+    html = html.replace(
+        '<script src="https://www.gstatic.com/firebasejs/',
+        inline_block
+        + '  <script src="https://www.gstatic.com/firebasejs/',
+        1,
+    )
 
     # data-count attributes 업데이트 (히어로 통계)
     # 구독자 (첫 번째 stat__num)
@@ -108,7 +133,7 @@ def main():
         f"✅ HTML 업데이트: 구독자={stats.get('subscribers', '?')}, "
         f"영상={stats.get('videos', '?')}, 조회수={stats.get('views', '?')}"
     )
-    print(f"   영상 {len(videos)}개, 뉴스 {len(news)}개 임베드")
+    print(f"   영상 {len(videos)}개, 뉴스 {len(news)}개, 이벤트 {len(events)}개 임베드")
 
 
 if __name__ == "__main__":
