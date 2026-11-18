@@ -118,6 +118,9 @@
     // Pokémon GO 뉴스 로드
     loadNews();
 
+    // Pokémon GO 이벤트 로드
+    loadEvents();
+
     // stats inline data → data-count 갱신
     var stats = getInlineData("inline-data", null);
     if (stats) {
@@ -216,6 +219,189 @@
       render(videos);
     } else {
       console.warn("[pokesunny] inline-videos not found, using fallback");
+      render(FALLBACK);
+    }
+  }
+
+  // --- Pokémon GO 이벤트 렌더링 ---
+  var EVENT_TYPE_LABELS = {
+    community: "커뮤니티",
+    raid: "레이드",
+    supermega: "슈퍼메가",
+    hatch: "부화",
+    maxbattle: "맥스배틀",
+    wildweek: "와일드 위크",
+    research: "리서치",
+    store: "스토어",
+    season: "시즌",
+    collab: "컬라보",
+    special: "특별",
+    wildarea: "와일드 에리어",
+    unknown: "기타",
+  };
+
+  function loadEvents() {
+    var container = document.getElementById("event-timeline");
+    if (!container) return;
+
+    var FALLBACK = [
+      {
+        url: "https://pokemongo.com/ko/news/",
+        name: "Pokémon GO 공식 이벤트 확인하기",
+        type: "special",
+        dates: [],
+        summary: "공식 이벤트 페이지에서 최신 정보를 확인하세요.",
+        image: "",
+      },
+    ];
+
+    function render(events) {
+      container.innerHTML = "";
+
+      if (!events || events.length === 0) {
+        container.innerHTML =
+          '<div class="event-timeline__loading">현재 진행 중인 이벤트가 없어요.<br />' +
+          '<a href="https://pokemongo.com/ko/events" target="_blank" rel="noopener" ' +
+          'style="color:var(--cyan);text-decoration:underline;">공식 이벤트 페이지 보기 →</a></div>';
+        return;
+      }
+
+      var now = new Date();
+      now.setHours(0, 0, 0, 0);
+
+      // 현재/미래 이벤트와 과거 이벤트 분리
+      var activeEvents = [];
+      var upcomingEvents = [];
+      var pastEvents = [];
+
+      events.forEach(function (ev) {
+        var isFuture = true;
+        if (ev.dates && ev.dates.length > 0) {
+          var endDate = ev.dates[ev.dates.length - 1];
+          var endParts = endDate.split("-");
+          if (endParts.length === 3) {
+            var end = new Date(endParts[0], endParts[1] - 1, endParts[2]);
+            if (end < now) isFuture = false;
+          }
+        }
+        ev._isFuture = isFuture;
+        if (isFuture) activeEvents.push(ev);
+        else pastEvents.push(ev);
+      });
+
+      // 현재 이벤트 하이라이트 카드 (최신 active 이벤트 1개)
+      if (activeEvents.length > 0) {
+        var current = activeEvents[0];
+        var highlight = document.createElement("div");
+        highlight.className = "event-highlight";
+
+        var badgeLabel = EVENT_TYPE_LABELS[current.type] || current.type || "이벤트";
+        var datesText = "";
+        if (current.dates && current.dates.length > 0) {
+          if (current.dates.length === 1) {
+            datesText = '<strong>날짜:</strong> ' + current.dates[0];
+          } else {
+            datesText =
+              '<strong>시작:</strong> ' +
+              current.dates[0] +
+              ' · <strong>종료:</strong> ' +
+              current.dates[current.dates.length - 1];
+          }
+        }
+
+        highlight.innerHTML =
+          '<div class="event-highlight__badge"><span class="dot"></span>진행 중</div>' +
+          '<h3 class="event-highlight__title">' + escapeHtml(current.name) + '</h3>' +
+          (current.summary
+            ? '<p class="event-highlight__desc">' + escapeHtml(current.summary) + '</p>'
+            : "") +
+          (datesText ? '<div class="event-highlight__dates">' + datesText + "</div>" : "") +
+          '<a class="event-highlight__link" href="' +
+          current.url +
+          '" target="_blank" rel="noopener">' +
+          "자세히 보기" +
+          '<svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>' +
+          "</a>";
+
+        container.appendChild(highlight);
+
+        // 나머지 active 이벤트 리스트
+        if (activeEvents.length > 1) {
+          upcomingEvents = activeEvents.slice(1);
+        }
+      }
+
+      // 나머지 이벤트 리스트
+      if (upcomingEvents.length > 0) {
+        var list = document.createElement("div");
+        list.className = "event-list";
+
+        upcomingEvents.forEach(function (ev) {
+          var a = document.createElement("a");
+          a.className = "event-item";
+          a.href = ev.url;
+          a.target = "_blank";
+          a.rel = "noopener";
+
+          var typeClass = ev.type || "unknown";
+          var badgeLabel = EVENT_TYPE_LABELS[typeClass] || typeClass || "기타";
+          var datesText = "";
+          if (ev.dates && ev.dates.length > 0) {
+            if (ev.dates.length === 1) {
+              datesText = ev.dates[0];
+            } else {
+              datesText = ev.dates[0] + " ~ " + ev.dates[ev.dates.length - 1];
+            }
+          }
+
+          a.innerHTML =
+            '<span class="event-item__dot event-item__dot--' +
+            typeClass +
+            '"></span>' +
+            '<div class="event-item__body">' +
+            '<h3 class="event-item__title">' + escapeHtml(ev.name) + '</h3>' +
+            '<div class="event-item__meta">' +
+            (datesText ? '<span class="event-item__dates">' + datesText + '</span>' : "") +
+            '<span class="event-badge event-badge--' +
+            typeClass +
+            '">' +
+            badgeLabel +
+            "</span>" +
+            "</div>" +
+            "</div>";
+
+          list.appendChild(a);
+        });
+
+        container.appendChild(list);
+      }
+
+      // 렌더링 후 reveal class 적용
+      addRevealClass();
+      if ("IntersectionObserver" in window) {
+        var io3 = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              io3.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.15 });
+        container.querySelectorAll(".event-highlight, .event-item").forEach(function (el) {
+          io3.observe(el);
+        });
+      } else {
+        container.querySelectorAll(".event-highlight, .event-item").forEach(function (el) {
+          el.classList.add("is-visible");
+        });
+      }
+    }
+
+    var events = getInlineData("inline-events", null);
+    if (Array.isArray(events) && events.length > 0) {
+      render(events);
+    } else {
+      console.warn("[pokesunny] inline-events not found, using fallback");
       render(FALLBACK);
     }
   }

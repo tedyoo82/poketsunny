@@ -682,6 +682,271 @@ body {
 }
 .news-card__meta span { white-space: nowrap; }
 
+/* ============ 이벤트 캘린더 ============ */
+.event-timeline {
+  display: grid;
+  gap: 18px;
+}
+
+.event-timeline__loading {
+  text-align: center;
+  color: var(--ink-dim);
+  font-size: 0.95rem;
+  padding: 40px 0;
+}
+
+/* 현재 이벤트 하이라이트 카드 */
+.event-highlight {
+  background:
+    radial-gradient(600px 200px at 20% 100%, rgba(55,214,230,0.12), transparent 60%),
+    var(--card);
+  border: 1px solid rgba(55, 214, 230, 0.35);
+  border-radius: var(--radius);
+  padding: clamp(22px, 4vw, 32px);
+  position: relative;
+  overflow: hidden;
+  animation: eventPulse 3s ease-in-out infinite;
+}
+
+@keyframes eventPulse {
+  0%,100% { box-shadow: 0 0 20px rgba(55,214,230,0.08); }
+  50% { box-shadow: 0 0 36px rgba(55,214,230,0.18); }
+}
+
+.event-highlight__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  background: rgba(55, 214, 230, 0.12);
+  border: 1px solid rgba(55, 214, 230, 0.3);
+  border-radius: 999px;
+  padding: 5px 14px;
+  margin-bottom: 14px;
+}
+
+.event-highlight__badge .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cyan);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.event-highlight__title {
+  font-size: clamp(1.15rem, 3vw, 1.5rem);
+  font-weight: 900;
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+}
+
+.event-highlight__desc {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin-bottom: 14px;
+}
+
+.event-highlight__dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 0.85rem;
+  font-family: var(--font-en);
+  color: var(--ink-dim);
+  margin-bottom: 14px;
+}
+
+.event-highlight__dates strong {
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+.event-highlight__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--cyan);
+  text-decoration: none;
+  transition: gap 0.2s, color 0.2s;
+}
+
+.event-highlight__link:hover {
+  color: var(--ink);
+  gap: 10px;
+}
+
+.event-highlight__link .ic { width: 0.9em; height: 0.9em; }
+
+/* 이벤트 타입 뱃지 */
+.event-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.event-badge--community {
+  background: rgba(55, 214, 230, 0.15);
+  color: var(--cyan);
+  border: 1px solid rgba(55, 214, 230, 0.3);
+}
+
+.event-badge--raid {
+  background: rgba(255, 95, 162, 0.15);
+  color: var(--pink);
+  border: 1px solid rgba(255, 95, 162, 0.3);
+}
+
+.event-badge--supermega {
+  background: rgba(255, 207, 92, 0.15);
+  color: var(--gold);
+  border: 1px solid rgba(255, 207, 92, 0.3);
+}
+
+.event-badge--hatch {
+  background: rgba(103, 232, 96, 0.15);
+  color: #67e860;
+  border: 1px solid rgba(103, 232, 96, 0.3);
+}
+
+.event-badge--maxbattle {
+  background: rgba(139, 123, 255, 0.15);
+  color: var(--violet);
+  border: 1px solid rgba(139, 123, 255, 0.3);
+}
+
+.event-badge--wildweek {
+  background: rgba(255, 165, 0, 0.15);
+  color: #ffa500;
+  border: 1px solid rgba(255, 165, 0, 0.3);
+}
+
+.event-badge--research {
+  background: rgba(79, 140, 255, 0.15);
+  color: var(--blue);
+  border: 1px solid rgba(79, 140, 255, 0.3);
+}
+
+.event-badge--store {
+  background: rgba(255, 215, 0, 0.15);
+  color: #ffd700;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.event-badge--season {
+  background: rgba(186, 85, 211, 0.15);
+  color: #ba55d3;
+  border: 1px solid rgba(186, 85, 211, 0.3);
+}
+
+.event-badge--collab {
+  background: rgba(0, 191, 165, 0.15);
+  color: #00bfa5;
+  border: 1px solid rgba(0, 191, 165, 0.3);
+}
+
+.event-badge--special {
+  background: rgba(255, 100, 100, 0.15);
+  color: #ff6464;
+  border: 1px solid rgba(255, 100, 100, 0.3);
+}
+
+.event-badge--unknown {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ink-dim);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* 타임라인 이벤트 리스트 */
+.event-list {
+  display: grid;
+  gap: 12px;
+}
+
+.event-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: transform 0.25s ease, border-color 0.3s ease, box-shadow 0.3s ease, background 0.25s ease;
+}
+
+.event-item:hover {
+  transform: translateY(-3px);
+  border-color: rgba(139, 123, 255, 0.4);
+  box-shadow: 0 6px 24px rgba(139, 123, 255, 0.12);
+  background: var(--card-hover);
+}
+
+.event-item__dot {
+  width: 10px;
+  height: 10px;
+  min-width: 10px;
+  border-radius: 50%;
+  margin-top: 6px;
+}
+
+.event-item__dot--community { background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+.event-item__dot--raid { background: var(--pink); box-shadow: 0 0 8px var(--pink); }
+.event-item__dot--supermega { background: var(--gold); box-shadow: 0 0 8px var(--gold); }
+.event-item__dot--hatch { background: #67e860; box-shadow: 0 0 8px #67e860; }
+.event-item__dot--maxbattle { background: var(--violet); box-shadow: 0 0 8px var(--violet); }
+.event-item__dot--wildweek { background: #ffa500; box-shadow: 0 0 8px #ffa500; }
+.event-item__dot--research { background: var(--blue); box-shadow: 0 0 8px var(--blue); }
+.event-item__dot--store { background: #ffd700; box-shadow: 0 0 8px #ffd700; }
+.event-item__dot--season { background: #ba55d3; box-shadow: 0 0 8px #ba55d3; }
+.event-item__dot--collab { background: #00bfa5; box-shadow: 0 0 8px #00bfa5; }
+.event-item__dot--special { background: #ff6464; box-shadow: 0 0 8px #ff6464; }
+.event-item__dot--unknown { background: var(--ink-dim); box-shadow: 0 0 8px var(--ink-dim); }
+
+.event-item__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.event-item__title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.45;
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.event-item:hover .event-item__title { color: var(--violet); }
+
+.event-item__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  font-size: 0.78rem;
+  color: var(--ink-dim);
+}
+
+.event-item__dates {
+  font-family: var(--font-en);
+  white-space: nowrap;
+}
+
 /* ============ 최근 영상 ============ */
 .section__head {
   position: relative;
