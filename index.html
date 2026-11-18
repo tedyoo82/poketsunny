@@ -149,13 +149,31 @@
         <span class="eyebrow">EVENTS</span>
         <h2>Pokémon GO 이벤트 캘린더</h2>
         <a class="section__more" href="https://pokemongo.com/ko/events" target="_blank" rel="noopener">
-          공식 이벤트 페이지
+          전체 일정
           <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
       </div>
-      <div class="event-timeline" id="event-timeline">
-        <div class="event-timeline__loading">불러오는 중…</div>
+
+      <!-- NOW EVENT -->
+      <div class="event-now" id="event-now">
+        <div class="event-now__label">🎯 NOW EVENT</div>
+        <div class="event-now__card" id="event-now-card">
+          <div class="event-now__loading">불러오는 중…</div>
+        </div>
       </div>
+
+      <!-- UPCOMING EVENTS -->
+      <div class="event-upcoming" id="event-upcoming">
+        <div class="event-upcoming__label">📅 UPCOMING EVENTS</div>
+        <div class="event-list" id="event-list">
+          <div class="event-list__loading">불러오는 중…</div>
+        </div>
+      </div>
+
+      <a class="event-all-link" href="https://pokemongo.com/ko/events" target="_blank" rel="noopener">
+        전체 일정 → pokemongo.com
+        <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
     </section>
 
     <!-- ===== 최근 영상 ===== -->
