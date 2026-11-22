@@ -299,7 +299,6 @@ body {
   color: transparent;
 }
 .stat__num.visit-badge {
-  font-size: clamp(1.07rem, 2.67vw, 1.47rem);
   font-weight: 800;
   background: linear-gradient(180deg, #fff, #b9c0e8);
   -webkit-background-clip: text;
