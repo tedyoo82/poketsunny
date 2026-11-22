@@ -1177,3 +1177,700 @@ body {
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; transition: none; }
 }
+
+/* ============ Pokémon 사전 ============ */
+
+/* 히어로 */
+.hero--pokemon {
+  padding-top: 100px;
+  padding-bottom: 40px;
+}
+.hero--pokemon .hero__title {
+  font-size: 3.2rem;
+  line-height: 1.15;
+}
+
+/* 검색 & 필터 */
+.poke-controls {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+}
+.poke-search {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+}
+.poke-search__ic {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  stroke: var(--ink-dim);
+  pointer-events: none;
+}
+.poke-search input {
+  width: 100%;
+  padding: 12px 16px 12px 42px;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: var(--ink);
+  font-size: 0.95rem;
+  font-family: var(--font-ko);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.poke-search input::placeholder {
+  color: var(--ink-dim);
+}
+.poke-search input:focus {
+  border-color: var(--cyan);
+}
+
+.poke-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+.poke-type-btn {
+  padding: 5px 12px;
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink-soft);
+  font-size: 0.75rem;
+  font-family: var(--font-ko);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.poke-type-btn:hover {
+  background: var(--card-hover);
+  border-color: var(--type-color, var(--cyan));
+}
+.poke-type-btn--active {
+  background: var(--type-color, var(--cyan));
+  color: var(--bg-0);
+  border-color: var(--type-color, var(--cyan));
+  font-weight: 700;
+}
+
+/* 지역 탭 */
+.poke-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 24px;
+}
+.poke-tab {
+  padding: 8px 18px;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+  font-family: var(--font-ko);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.poke-tab:hover {
+  background: var(--card-hover);
+  border-color: var(--violet);
+}
+.poke-tab--active {
+  background: var(--violet);
+  color: var(--ink);
+  border-color: var(--violet);
+  font-weight: 700;
+}
+
+/* 통계 바 */
+.poke-stats-bar {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin: 18px 0 24px;
+  font-size: 0.85rem;
+  color: var(--ink-dim);
+}
+.poke-stats-bar strong {
+  color: var(--cyan);
+  font-weight: 700;
+}
+
+/* 포켓몬 그리드 */
+.poke-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 16px;
+}
+
+/* 포켓몬 카드 */
+.poke-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: center;
+  animation: pokeCardIn 0.3s ease both;
+}
+@keyframes pokeCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.poke-card:hover {
+  background: var(--card-hover);
+  border-color: var(--cyan);
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 8px 30px rgba(55, 214, 230, 0.12);
+}
+.poke-card__img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.poke-card__img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  image-rendering: auto;
+  transition: transform 0.3s ease;
+}
+.poke-card:hover .poke-card__img {
+  transform: scale(1.08);
+}
+.poke-card__dex {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: rgba(10, 12, 28, 0.75);
+  color: var(--cyan);
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+.poke-card__badges {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  gap: 3px;
+}
+.poke-card__badge {
+  font-size: 0.55rem;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 4px;
+  letter-spacing: 0.03em;
+}
+.poke-card__badge--mega {
+  background: linear-gradient(135deg, var(--violet), var(--pink));
+  color: var(--ink);
+}
+.poke-card__badge--gmax {
+  background: linear-gradient(135deg, var(--gold), var(--pink));
+  color: var(--bg-0);
+}
+.poke-card__class {
+  font-size: 0.55rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.poke-card__class--legendary {
+  background: linear-gradient(135deg, var(--gold), #f59e0b);
+  color: var(--bg-0);
+}
+.poke-card__class--mythical {
+  background: linear-gradient(135deg, var(--pink), var(--violet));
+  color: var(--ink);
+}
+.poke-card__class--ultra-beast {
+  background: linear-gradient(135deg, #ef4444, var(--pink));
+  color: var(--ink);
+}
+.poke-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.poke-card__name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0;
+}
+.poke-card__types {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+.poke-card__type {
+  font-size: 0.6rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  color: var(--ink);
+}
+.poke-card__stats-mini {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 4px;
+}
+.poke-card__stat-mini {
+  font-size: 0.6rem;
+  color: var(--ink-dim);
+}
+.poke-card__stat-mini__label {
+  font-weight: 600;
+  margin-right: 2px;
+}
+.poke-card__stat-mini__value {
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+/* 로딩 & 무한 스크롤 */
+.poke-grid__loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 0;
+  color: var(--ink-dim);
+  font-size: 0.95rem;
+}
+.poke-load-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+  margin-bottom: 16px;
+}
+.poke-load-more .btn {
+  padding: 10px 28px;
+}
+.poke-loading-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  padding: 16px 0;
+  color: var(--ink-dim);
+  font-size: 0.85rem;
+}
+.poke-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--card-border);
+  border-top-color: var(--cyan);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 결과 없음 */
+.poke-empty {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+  gap: 12px;
+  color: var(--ink-dim);
+}
+.poke-empty__icon {
+  font-size: 2.5rem;
+}
+
+/* ===== 모달 ===== */
+.poke-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.poke-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 6, 18, 0.88);
+  backdrop-filter: blur(6px);
+}
+.poke-modal__content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--bg-1);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 28px;
+  animation: modalIn 0.25s ease;
+}
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+.poke-modal__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--card-border);
+  border-radius: 50%;
+  background: var(--bg-2);
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.poke-modal__close:hover {
+  background: var(--pink);
+  border-color: var(--pink);
+}
+.poke-modal__close .ic {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.5;
+}
+
+.poke-modal__header {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+.poke-modal__img-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.poke-modal__img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: auto;
+}
+.poke-modal__dex {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: rgba(10, 12, 28, 0.8);
+  color: var(--cyan);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+.poke-modal__title-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.poke-modal__name {
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin: 0;
+}
+.poke-modal__name-en {
+  font-size: 0.8rem;
+  color: var(--ink-dim);
+}
+.poke-modal__types {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.poke-modal__type {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 999px;
+  color: var(--ink);
+}
+.poke-modal__meta {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.poke-modal__class {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+.poke-modal__class--legendary {
+  background: linear-gradient(135deg, var(--gold), #f59e0b);
+  color: var(--bg-0);
+}
+.poke-modal__class--mythical {
+  background: linear-gradient(135deg, var(--pink), var(--violet));
+  color: var(--ink);
+}
+.poke-modal__class--ultra-beast {
+  background: linear-gradient(135deg, #ef4444, var(--pink));
+  color: var(--ink);
+}
+.poke-modal__badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.03em;
+}
+.poke-modal__badge--mega {
+  background: linear-gradient(135deg, var(--violet), var(--pink));
+  color: var(--ink);
+}
+.poke-modal__badge--gmax {
+  background: linear-gradient(135deg, var(--gold), var(--pink));
+  color: var(--bg-0);
+}
+.poke-modal__yt {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 999px;
+  background: #ff0000;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: var(--font-ko);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: fit-content;
+}
+.poke-modal__yt:hover {
+  background: #cc0000;
+}
+.poke-modal__yt .ic {
+  width: 14px;
+  height: 14px;
+  fill: #fff;
+  stroke: none;
+}
+
+/* 스텟 바 */
+.poke-modal__stat {
+  margin-bottom: 10px;
+}
+.poke-modal__stat__head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  margin-bottom: 3px;
+}
+.poke-modal__stat__label {
+  font-weight: 600;
+  color: var(--ink-dim);
+}
+.poke-modal__stat__value {
+  font-weight: 700;
+  color: var(--ink);
+}
+.poke-modal__stat__bar {
+  width: 100%;
+  height: 8px;
+  background: var(--bg-2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.poke-modal__stat__fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+/* 스킬 */
+.poke-modal__moves-section {
+  margin-top: 18px;
+}
+.poke-modal__moves-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--ink-soft);
+}
+.poke-modal__moves-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.poke-modal__move {
+  font-size: 0.7rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: var(--bg-2);
+  color: var(--ink-soft);
+  font-family: var(--font-ko);
+}
+.poke-modal__move--special {
+  border: 1px solid var(--violet);
+  color: var(--violet);
+}
+.poke-modal__move--elite {
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  background: rgba(255, 207, 92, 0.08);
+}
+
+/* 진화 */
+.poke-modal__evos-section {
+  margin-top: 18px;
+}
+.poke-modal__evo-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--ink-soft);
+}
+.poke-modal__evo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.poke-modal__evo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: var(--bg-2);
+  border-radius: 8px;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+}
+.poke-modal__evo-candies {
+  font-size: 0.7rem;
+}
+
+/* 모달 네비게이션 */
+.poke-modal__nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--card-border);
+}
+.poke-modal__nav-btn {
+  padding: 6px 14px;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink-soft);
+  font-size: 0.75rem;
+  font-family: var(--font-ko);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.poke-modal__nav-btn:hover {
+  background: var(--card-hover);
+  border-color: var(--cyan);
+  color: var(--ink);
+}
+
+/* 반응형 */
+@media (max-width: 760px) {
+  .poke-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+  }
+  .poke-card {
+    padding: 10px;
+  }
+  .poke-card__name {
+    font-size: 0.8rem;
+  }
+  .poke-modal__content {
+    padding: 20px;
+    margin: 10px;
+  }
+  .poke-modal__header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .poke-modal__img-wrap {
+    width: 160px;
+    height: 160px;
+  }
+  .poke-modal__types {
+    justify-content: center;
+  }
+  .poke-modal__meta {
+    justify-content: center;
+  }
+  .poke-modal__yt {
+    margin: 4px auto 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .poke-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .poke-tabs {
+    gap: 6px;
+  }
+  .poke-tab {
+    padding: 6px 12px;
+    font-size: 0.78rem;
+  }
+  .poke-types {
+    gap: 4px;
+  }
+  .poke-type-btn {
+    padding: 4px 8px;
+    font-size: 0.68rem;
+  }
+  .hero--pokemon .hero__title {
+    font-size: 2.4rem;
+  }
+}
