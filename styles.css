@@ -417,6 +417,7 @@ body {
 .card:hover .card__glow { opacity: 0.95; }
 .card__glow--battle { background: radial-gradient(circle, rgba(55,214,230,0.5), transparent 70%); }
 .card__glow--story { background: radial-gradient(circle, rgba(139,123,255,0.55), transparent 70%); }
+.card__glow--pokedex { background: radial-gradient(circle, rgba(255,214,10,0.55), transparent 70%); }
 
 .card__tag {
   display: inline-block;
@@ -461,6 +462,11 @@ body {
 }
 .card--battle .card__list li::before { color: var(--cyan); }
 .card--story .card__list li::before { color: var(--violet); }
+.card--pokedex .card__list li::before { color: #ffd60a; }
+
+.card--battle .card__link { color: var(--cyan); }
+.card--story .card__link { color: var(--violet); }
+.card--pokedex .card__link { color: #ffd60a; }
 
 .card__link {
   display: inline-flex;
@@ -476,6 +482,7 @@ body {
 .card__link:hover .ic { transform: translateX(5px); }
 .card--battle .card__link:hover .ic { color: var(--blue); }
 .card--story .card__link:hover .ic { color: #a99bff; }
+.card--pokedex .card__link:hover .ic { color: #ffe566; }
 
 /* 썸네일 스트립 */
 .thumbs {
@@ -498,6 +505,7 @@ body {
 }
 .card--battle .thumb:hover { box-shadow: 0 10px 30px rgba(55,214,230,0.25); }
 .card--story .thumb:hover { box-shadow: 0 10px 30px rgba(139,123,255,0.30); }
+.card--pokedex .thumb:hover { box-shadow: 0 10px 30px rgba(255,214,10,0.30); }
 
 .thumb img {
   display: block;
