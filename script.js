@@ -121,7 +121,7 @@
     // Pokémon GO 이벤트 로드
     loadEvents();
 
-    // stats inline data → data-count 갱신
+    // stats inline data → data-count 갱신 + 증감 표시
     var stats = getInlineData("inline-data", null);
     if (stats) {
       var mapping = {
@@ -137,6 +137,24 @@
           // 아직 카운트업 시작 전이면 텍스트도 갱신
           if (!revealed) {
             el.textContent = val.toLocaleString("ko-KR");
+          }
+        }
+        // 증감 표시
+        var changeKey = "change_" + key;
+        var changeVal = stats[changeKey];
+        if (typeof changeVal === "number" && el) {
+          var changeEl = el.querySelector(".stat__change");
+          if (changeEl) {
+            if (changeVal > 0) {
+              changeEl.textContent = "+" + changeVal.toLocaleString("ko-KR");
+              changeEl.className = "stat__change stat__change--up";
+            } else if (changeVal < 0) {
+              changeEl.textContent = changeVal.toLocaleString("ko-KR");
+              changeEl.className = "stat__change stat__change--down";
+            } else {
+              changeEl.textContent = "—";
+              changeEl.className = "stat__change stat__change--none";
+            }
           }
         }
       });

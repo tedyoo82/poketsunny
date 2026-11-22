@@ -290,6 +290,34 @@ body {
   background-clip: text;
   color: transparent;
   font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+
+/* 어제 대비 증감 */
+.stat__change {
+  font-family: var(--font-en);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 2px 7px;
+  border-radius: 6px;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+.stat__change--up {
+  color: #5ee8a0;
+  background: rgba(94, 232, 160, 0.15);
+}
+.stat__change--down {
+  color: #f87771;
+  background: rgba(248, 119, 113, 0.15);
+}
+.stat__change--none {
+  color: var(--ink-dim);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 /* 방문자 배지 — 다른 통계와 동일한 스타일 */

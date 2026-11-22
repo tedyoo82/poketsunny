@@ -49,10 +49,30 @@ def main():
     print(f"  Videos:      {videos:,}", file=sys.stderr)
     print(f"  Views:       {views:,}", file=sys.stderr)
 
+    # 이전 stats.json 읽기 (어제 대비 증감 계산)
+    prev_subscribers = prev_videos = prev_views = None
+    try:
+        with open("stats.json", "r", encoding="utf-8") as f:
+            prev_data = json.load(f)
+            prev_subscribers = int(prev_data.get("subscribers", 0))
+            prev_videos = int(prev_data.get("videos", 0))
+            prev_views = int(prev_data.get("views", 0))
+    except Exception:
+        pass
+
+    # 증감 계산
+    def calc_change(current, previous):
+        if previous is not None and previous > 0:
+            return current - previous
+        return 0
+
     result = {
         "subscribers": subscribers,
         "videos": videos,
         "views": views,
+        "change_subscribers": calc_change(subscribers, prev_subscribers),
+        "change_videos": calc_change(videos, prev_videos),
+        "change_views": calc_change(views, prev_views),
         "updated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
 
