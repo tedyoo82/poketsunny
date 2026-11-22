@@ -288,7 +288,7 @@ body {
   align-items: baseline;
   gap: 6px;
   flex-wrap: nowrap;
-  font-size: clamp(0.8rem, 2vw, 1.1rem);
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
 }
 .stat__val {
   font-weight: 800;
