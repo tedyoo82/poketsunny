@@ -285,13 +285,14 @@ body {
   font-family: var(--font-en);
   font-variant-numeric: tabular-nums;
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   gap: 6px;
   flex-wrap: nowrap;
+  font-size: clamp(3rem, 9vw, 6rem);
 }
 .stat__val {
   font-weight: 800;
-  font-size: clamp(2.8rem, 8vw, 5.5rem);
+  font-size: 1em;
   background: linear-gradient(180deg, #fff, #b9c0e8);
   -webkit-background-clip: text;
   background-clip: text;
