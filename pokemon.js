@@ -46,6 +46,14 @@
     return TYPE_KOREAN[key] || key.replace("POKEMON_TYPE_", "");
   }
 
+  // ===== 포켓몬 스프라이트 URL (PokeAPI) =====
+  function getPokemonImage(p) {
+    if (p.dexNr && p.dexNr > 0) {
+      return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${p.dexNr}.png`;
+    }
+    return p.image || "";
+  }
+
   // ===== 스킬 한글 매핑 =====
   const MOVES_KOREAN = {
     // --- 퀵 스킬 (Fast Moves) ---
@@ -589,7 +597,7 @@
 
     card.innerHTML = `
       <div class="poke-card__img-wrap">
-        <img class="poke-card__img" src="${p.image}" alt="${p.name}" loading="lazy" />
+        <img class="poke-card__img" src="${getPokemonImage(p)}" alt="${p.name}" loading="lazy" />
         <span class="poke-card__dex">#${String(p.dexNr).padStart(3, "0")}</span>
         <div class="poke-card__badges">${classBadge}${megaBadge}${gmaxBadge}</div>
       </div>
@@ -699,7 +707,7 @@
     $modalBody.innerHTML = `
       <div class="poke-modal__header">
         <div class="poke-modal__img-wrap">
-          <img class="poke-modal__img" src="${p.image}" alt="${p.name}" />
+          <img class="poke-modal__img" src="${getPokemonImage(p)}" alt="${p.name}" />
           <span class="poke-modal__dex">#${String(p.dexNr).padStart(3, "0")}</span>
         </div>
         <div class="poke-modal__title-area">
