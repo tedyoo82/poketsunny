@@ -87,20 +87,6 @@ def main():
         1,
     )
 
-    def update_stat_text(html, value):
-        """stat__num의 텍스트를 업데이트하되 .stat__change span은 보존."""
-        pattern = r'(class="stat__num"[^>]*>)(\d+)(<span class="stat__change">.*?</span>)'
-        replacement = r'\g<1>' + str(value).replace(",", "") + r'\g<3>'
-        return re.sub(pattern, replacement, html, count=1)
-
-    # 텍스트 콘텐츠 업데이트 (span 보존)
-    if "subscribers" in stats and stats["subscribers"]:
-        html = update_stat_text(html, stats["subscribers"])
-    if "videos" in stats and stats["videos"]:
-        html = update_stat_text(html, stats["videos"])
-    if "views" in stats and stats["views"]:
-        html = update_stat_text(html, stats["views"])
-
     # data-count attributes 업데이트 (히어로 통계)
     # 구독자 (첫 번째 stat__num)
     if "subscribers" in stats and stats["subscribers"]:

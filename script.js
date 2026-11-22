@@ -41,6 +41,9 @@
     var target = parseInt(el.getAttribute("data-count"), 10);
     if (isNaN(target)) return;
 
+    var valEl = el.querySelector(".stat__val");
+    if (!valEl) return;
+
     var duration = 1400;
     var start = null;
 
@@ -53,11 +56,11 @@
       var progress = Math.min((ts - start) / duration, 1);
       // ease-out
       var eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = fmt(Math.floor(eased * target));
+      valEl.textContent = fmt(Math.floor(eased * target));
       if (progress < 1) {
         requestAnimationFrame(step);
       } else {
-        el.textContent = fmt(target);
+        valEl.textContent = fmt(target);
       }
     }
     requestAnimationFrame(step);
@@ -69,18 +72,63 @@
     addRevealClass();
 
     var counters = document.querySelectorAll(".stat__num");
+
+    // stats inline data 읽기
+    var stats = getInlineData("inline-data", null);
+    var mapping = null;
+    if (stats) {
+      mapping = {
+        subscribers: counters[0],
+        videos: counters[1],
+        views: counters[2],
+      };
+      Object.keys(mapping).forEach(function (key) {
+        var el = mapping[key];
+        var val = stats[key];
+        if (el && typeof val === "number" && val > 0) {
+          el.setAttribute("data-count", val);
+        }
+      });
+    }
+
     var revealed = false;
+
+    function setChangeIndicator(el, key) {
+      if (!stats) return;
+      var changeVal = stats["change_" + key];
+      if (typeof changeVal !== "number") return;
+      var changeEl = el.querySelector(".stat__change");
+      if (!changeEl) return;
+      if (changeVal > 0) {
+        changeEl.textContent = "↑ +" + changeVal.toLocaleString("ko-KR");
+        changeEl.className = "stat__change stat__change--up";
+      } else if (changeVal < 0) {
+        changeEl.textContent = "↓ " + changeVal.toLocaleString("ko-KR");
+        changeEl.className = "stat__change stat__change--down";
+      } else {
+        changeEl.textContent = "—";
+        changeEl.className = "stat__change stat__change--none";
+      }
+    }
 
     function startCounters() {
       if (revealed) return;
       revealed = true;
-      counters.forEach(function (el) {
+      counters.forEach(function (el, idx) {
         var target = parseInt(el.getAttribute("data-count"), 10);
         if (isNaN(target)) return;
-        // 텍스트가 이미 target과 같으면 애니메이션 생략 (inject_data.py가 설정)
-        var current = parseInt(el.textContent.replace(/[^0-9]/g, ""), 10);
-        if (current === target) return;
-        animateCount(el);
+        var valEl = el.querySelector(".stat__val");
+        var current = valEl ? parseInt(valEl.textContent.replace(/[^0-9]/g, ""), 10) : 0;
+        if (current !== target) {
+          animateCount(el);
+        }
+        // 증감 표시 설정 (애니메이션 여부와 관계없이 항상 실행)
+        if (mapping) {
+          var keys = Object.keys(mapping);
+          if (idx < keys.length) {
+            setChangeIndicator(el, keys[idx]);
+          }
+        }
       });
     }
 
@@ -127,41 +175,6 @@
 
     // Pokémon GO 이벤트 로드
     loadEvents();
-
-    // stats inline data → data-count 갱신 + 증감 표시
-    var stats = getInlineData("inline-data", null);
-    if (stats) {
-      var mapping = {
-        subscribers: counters[0],
-        videos: counters[1],
-        views: counters[2],
-      };
-      Object.keys(mapping).forEach(function (key) {
-        var el = mapping[key];
-        var val = stats[key];
-        if (el && typeof val === "number" && val > 0) {
-          el.setAttribute("data-count", val);
-        }
-        // 증감 표시
-        var changeKey = "change_" + key;
-        var changeVal = stats[changeKey];
-        if (typeof changeVal === "number" && el) {
-          var changeEl = el.querySelector(".stat__change");
-          if (changeEl) {
-            if (changeVal > 0) {
-              changeEl.textContent = "↑ +" + changeVal.toLocaleString("ko-KR");
-              changeEl.className = "stat__change stat__change--up";
-            } else if (changeVal < 0) {
-              changeEl.textContent = "↓ " + changeVal.toLocaleString("ko-KR");
-              changeEl.className = "stat__change stat__change--down";
-            } else {
-              changeEl.textContent = "—";
-              changeEl.className = "stat__change stat__change--none";
-            }
-          }
-        }
-      });
-    }
   }
 
   function addRevealClass() {

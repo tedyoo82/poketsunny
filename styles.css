@@ -283,17 +283,19 @@ body {
 }
 .stat__num {
   font-family: var(--font-en);
+  font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+.stat__val {
   font-weight: 800;
   font-size: clamp(1.8rem, 5vw, 2.8rem);
   background: linear-gradient(180deg, #fff, #b9c0e8);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  font-variant-numeric: tabular-nums;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: nowrap;
 }
 
 /* 어제 대비 증감 */
