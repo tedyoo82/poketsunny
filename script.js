@@ -316,6 +316,21 @@
       return dateStr;
     }
 
+    function deriveEventName(url) {
+      try {
+        var path = new URL(url).pathname;
+        var parts = path.split("/").filter(Boolean);
+        var slug = parts.pop() || "";
+        return slug
+          .replace(/[-_]+/g, " ")
+          .replace(/\b\w/g, function (c) {
+            return c.toUpperCase();
+          });
+      } catch (e) {
+        return "";
+      }
+    }
+
     function render(events) {
       if (!events || events.length === 0) {
         nowEl.innerHTML = '<div class="event-now__loading">현재 진행 중인 이벤트가 없어요</div>';
@@ -354,9 +369,14 @@
           }
         }
 
+        var displayName = current.name;
+        if (displayName.indexOf("와일드 에리어알림") !== -1) {
+          displayName = deriveEventName(current.url) || displayName;
+        }
+
         nowEl.innerHTML =
           '<a href="' + escapeHtml(current.url) + '" target="_blank" rel="noopener" class="event-now__card-link">' +
-          '<div class="event-now__name">' + escapeHtml(current.name) + '</div>' +
+          '<div class="event-now__name">' + escapeHtml(displayName) + '</div>' +
           '<div class="event-now__dates">현재 진행 중! ' + datesText + "</div></a>";
       } else {
         nowEl.innerHTML = '<div class="event-now__loading">현재 진행 중인 이벤트가 없어요</div>';
@@ -427,10 +447,15 @@
           }
         }
 
+        var displayName = ev.name;
+        if (displayName.indexOf("와일드 에리어알림") !== -1) {
+          displayName = deriveEventName(ev.url) || displayName;
+        }
+
         a.innerHTML =
           '<span class="event-row__date">' + datesText + "</span>" +
           '<span class="event-row__emoji">' + emoji + "</span>" +
-          '<span class="event-row__name">' + escapeHtml(ev.name) + "</span>";
+          '<span class="event-row__name">' + escapeHtml(displayName) + "</span>";
 
         listEl.appendChild(a);
       });
