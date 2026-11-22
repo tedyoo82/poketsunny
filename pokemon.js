@@ -465,7 +465,33 @@
       const res = await fetch("pokemon.json?_t=" + Date.now());
       if (!res.ok) throw new Error("Failed to load: " + res.status);
       const data = await res.json();
-      allPokemon = data.all || [];
+      console.log("pokemon.json loaded, keys:", Object.keys(data));
+      console.log("data.all type:", typeof data.all, "length:", data.all?.length);
+
+      // JSON의 types는 이미 한글(예: "풀", "독")로 저장됨
+      // POKEMON_TYPE_* 형식에서 한글로 변환
+      allPokemon = (data.all || []).map((p) => {
+        if (p.types) {
+          p.types = p.types.map((t) => {
+            if (t.startsWith("POKEMON_TYPE_")) {
+              return TYPE_KOREAN[t] || t.replace("POKEMON_TYPE_", "");
+            }
+            return t; // 이미 한글이면 그대로
+          });
+        }
+        return p;
+      });
+
+      console.log("allPokemon count:", allPokemon.length);
+      if (allPokemon.length > 0) {
+        console.log("sample:", allPokemon[0].name, "types:", allPokemon[0].types);
+      }
+
+      if (allPokemon.length === 0) {
+        $grid.innerHTML = '<div class="poke-grid__loading">데이터가 비어 있습니다.</div>';
+        return;
+      }
+
       initPage();
     } catch (err) {
       console.error("pokemon.json load error:", err);
