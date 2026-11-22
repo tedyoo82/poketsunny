@@ -74,7 +74,14 @@
     function startCounters() {
       if (revealed) return;
       revealed = true;
-      counters.forEach(animateCount);
+      counters.forEach(function (el) {
+        var target = parseInt(el.getAttribute("data-count"), 10);
+        if (isNaN(target)) return;
+        // 텍스트가 이미 target과 같으면 애니메이션 생략 (inject_data.py가 설정)
+        var current = parseInt(el.textContent.replace(/[^0-9]/g, ""), 10);
+        if (current === target) return;
+        animateCount(el);
+      });
     }
 
     if ("IntersectionObserver" in window) {
@@ -134,10 +141,6 @@
         var val = stats[key];
         if (el && typeof val === "number" && val > 0) {
           el.setAttribute("data-count", val);
-          // 아직 카운트업 시작 전이면 텍스트도 갱신
-          if (!revealed) {
-            el.textContent = val.toLocaleString("ko-KR");
-          }
         }
         // 증감 표시
         var changeKey = "change_" + key;
