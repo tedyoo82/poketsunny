@@ -11,19 +11,18 @@
     initFirebase();
     var visitDb = fbDb;
 
-    // 카운트 증가 (transaction으로 안전히)
+    // 카운트 증가 후 바로 읽기 (transaction 완료 후)
     visitDb.ref("visits/count").transaction(function (current) {
       return (current || 0) + 1;
-    });
-
-    // 현재 카운트 읽기
-    visitDb.ref("visits/count").once("value", function (snap) {
-      var count = snap.val() || 0;
-      badge.textContent = count.toLocaleString("ko-KR");
-    }).catch(function (err) {
-      console.warn("[pokesunny] visit counter read failed:", err);
-      badge.textContent = "—";
-    });
+    }, function (err, committed, snap) {
+      if (committed && snap) {
+        var count = snap.val() || 0;
+        badge.textContent = count.toLocaleString("ko-KR");
+      } else {
+        console.warn("[pokesunny] visit counter transaction failed:", err);
+        badge.textContent = "—";
+      }
+    }, false); // persist=true
   }
 
   // --- inline data 읽기 (GitHub Actions이 HTML에 임베드) ---
