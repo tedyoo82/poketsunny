@@ -291,7 +291,7 @@ body {
 }
 .stat__val {
   font-weight: 800;
-  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-size: clamp(2.4rem, 7vw, 4rem);
   background: linear-gradient(180deg, #fff, #b9c0e8);
   -webkit-background-clip: text;
   background-clip: text;
