@@ -321,6 +321,23 @@
         var path = new URL(url).pathname;
         var parts = path.split("/").filter(Boolean);
         var slug = parts.pop() || "";
+
+        // URL 슬러그 → 한국어 이벤트명 매핑
+        var NAME_MAP = {
+          "community-day-december-2026": "12월 커뮤니티 데이",
+          "duolingo-2026": "듀올링고 2026",
+          "pokemon-crocs-2026": "포켓몬 크록스 2026",
+          "save-the-date-s25": "25시즌 저장하기",
+          "black-friday-2026": "블랙프라이데이 2026",
+          "gowildarea-2026-timed-research": "고와일드에리어 2026 타임드 리서치",
+          "clefable-super-mega-raid-day-2026": "클레페이블 슈퍼 메가 레이드 데이 2026",
+          "community-meetups-go-wild-area-2026-details-asia-pacific": "고와일드에리어 2026 커뮤니티 미트업",
+          "forever-stamp-rally-go-wild-area-2026": "고와일드에리어 2026 포에버 스탬프 라리",
+          "get-ready-for-gowildarea-2026": "고와일드에리어 2026 준비하기",
+        };
+
+        if (NAME_MAP[slug]) return NAME_MAP[slug];
+
         return slug
           .replace(/[-_]+/g, " ")
           .replace(/\b\w/g, function (c) {
