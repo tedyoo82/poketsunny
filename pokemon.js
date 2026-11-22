@@ -46,10 +46,10 @@
     return TYPE_KOREAN[key] || key.replace("POKEMON_TYPE_", "");
   }
 
-  // ===== 포켓몬 스프라이트 URL (PokeAPI) =====
+  // ===== 포켓몬 스프라이트 URL (PokeAPI Home Art) =====
   function getPokemonImage(p) {
     if (p.dexNr && p.dexNr > 0) {
-      return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${p.dexNr}.png`;
+      return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${p.dexNr}.png`;
     }
     return p.image || "";
   }
