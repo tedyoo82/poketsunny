@@ -146,10 +146,10 @@
           var changeEl = el.querySelector(".stat__change");
           if (changeEl) {
             if (changeVal > 0) {
-              changeEl.textContent = "+" + changeVal.toLocaleString("ko-KR");
+              changeEl.textContent = "↑ +" + changeVal.toLocaleString("ko-KR");
               changeEl.className = "stat__change stat__change--up";
             } else if (changeVal < 0) {
-              changeEl.textContent = changeVal.toLocaleString("ko-KR");
+              changeEl.textContent = "↓ " + changeVal.toLocaleString("ko-KR");
               changeEl.className = "stat__change stat__change--down";
             } else {
               changeEl.textContent = "—";
