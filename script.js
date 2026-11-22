@@ -355,8 +355,9 @@
         }
 
         nowEl.innerHTML =
+          '<a href="' + escapeHtml(current.url) + '" target="_blank" rel="noopener" class="event-now__card-link">' +
           '<div class="event-now__name">' + escapeHtml(current.name) + '</div>' +
-          '<div class="event-now__dates">현재 진행 중! ' + datesText + "</div>";
+          '<div class="event-now__dates">현재 진행 중! ' + datesText + "</div></a>";
       } else {
         nowEl.innerHTML = '<div class="event-now__loading">현재 진행 중인 이벤트가 없어요</div>';
       }
