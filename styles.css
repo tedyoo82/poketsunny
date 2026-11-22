@@ -1477,7 +1477,7 @@ body {
   gap: 4px;
 }
 .poke-card__name {
-  font-size: 0.6rem;
+  font-size: 0.9rem;
   font-weight: 700;
   color: var(--ink);
   margin: 0;
@@ -1670,7 +1670,7 @@ body {
   gap: 6px;
 }
 .poke-modal__name {
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-weight: 900;
   margin: 0;
 }
@@ -1764,7 +1764,7 @@ body {
 .poke-modal__stat__head {
   display: flex;
   justify-content: space-between;
-  font-size: 0.5rem;
+  font-size: 0.75rem;
   margin-bottom: 3px;
 }
 .poke-modal__stat__label {
@@ -1793,7 +1793,7 @@ body {
   margin-top: 18px;
 }
 .poke-modal__moves-title {
-  font-size: 0.55rem;
+  font-size: 0.85rem;
   font-weight: 700;
   margin-bottom: 8px;
   color: var(--ink-soft);
@@ -1804,7 +1804,7 @@ body {
   gap: 6px;
 }
 .poke-modal__move {
-  font-size: 0.45rem;
+  font-size: 0.7rem;
   padding: 4px 10px;
   border-radius: 6px;
   background: var(--bg-2);
@@ -1885,7 +1885,7 @@ body {
     padding: 10px;
   }
   .poke-card__name {
-    font-size: 0.55rem;
+    font-size: 0.8rem;
   }
   .poke-modal__content {
     padding: 20px;
