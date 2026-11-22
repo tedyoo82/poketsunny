@@ -306,6 +306,8 @@ body {
   border-radius: 6px;
   white-space: nowrap;
   letter-spacing: 0.02em;
+  isolation: isolate;
+  position: relative;
 }
 .stat__change--up {
   color: #5ee8a0;
@@ -316,8 +318,8 @@ body {
   background: rgba(248, 119, 113, 0.15);
 }
 .stat__change--none {
-  color: var(--ink-dim);
-  background: rgba(255, 255, 255, 0.06);
+  color: #c0c6f0;
+  background: rgba(192, 198, 240, 0.12);
 }
 
 /* 방문자 배지 — 다른 통계와 동일한 스타일 */
