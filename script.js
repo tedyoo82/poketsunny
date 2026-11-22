@@ -22,7 +22,7 @@
         console.warn("[pokesunny] visit counter transaction failed:", err);
         badge.textContent = "—";
       }
-    }, false); // persist=true
+    }, true); // applyLocally=true: 즉시 UI 업데이트 + 백그라운드 동기화
   }
 
   // --- inline data 읽기 (GitHub Actions이 HTML에 임베드) ---
