@@ -667,16 +667,16 @@
     // 스킬
     const movesHtml = [];
     if (p.quickMoves?.length) {
-      movesHtml.push(`<div class="poke-modal__moves-section"><h4 class="poke-modal__moves-title">퀵 스킬</h4><div class="poke-modal__moves-list">${p.quickMoves.map(m => `<span class="poke-modal__move">${m}</span>`).join("")}</div></div>`);
+      movesHtml.push(`<div class="poke-modal__moves-section"><h4 class="poke-modal__moves-title">퀵 스킬</h4><div class="poke-modal__moves-list">${p.quickMoves.map(m => `<span class="poke-modal__move">${moveToKorean(m)}</span>`).join("")}</div></div>`);
     }
     if (p.cinematicMoves?.length) {
-      movesHtml.push(`<div class="poke-modal__moves-section"><h4 class="poke-modal__moves-title">시네매틱 스킬</h4><div class="poke-modal__moves-list">${p.cinematicMoves.map(m => `<span class="poke-modal__move poke-modal__move--special">${m}</span>`).join("")}</div></div>`);
+      movesHtml.push(`<div class="poke-modal__moves-section"><h4 class="poke-modal__moves-title">시네매틱 스킬</h4><div class="poke-modal__moves-list">${p.cinematicMoves.map(m => `<span class="poke-modal__move poke-modal__move--special">${moveToKorean(m)}</span>`).join("")}</div></div>`);
     }
     if (p.eliteQuickMoves?.length) {
-      movesHtml.push(`<div class="poke-modal__moves-section"><h4 class="poke-modal__moves-title">에픽 퀵 스킬</h4><div class="poke-modal__moves-list">${p.eliteQuickMoves.map(m => `<span class="poke-modal__move poke-modal__move--elite">${m}</span>`).join("")}</div></div>`);
+      movesHtml.push(`<div class="poke-modal__moves-section"><h4 class="poke-modal__moves-title">에픽 퀵 스킬</h4><div class="poke-modal__moves-list">${p.eliteQuickMoves.map(m => `<span class="poke-modal__move poke-modal__move--elite">${moveToKorean(m)}</span>`).join("")}</div></div>`);
     }
     if (p.eliteCinematicMoves?.length) {
-      movesHtml.push(`<div class="poke-modal__moves-section"><h4 class="poke-modal__moves-title">에픽 시네매틱 스킬</h4><div class="poke-modal__moves-list">${p.eliteCinematicMoves.map(m => `<span class="poke-modal__move poke-modal__move--elite">${m}</span>`).join("")}</div></div>`);
+      movesHtml.push(`<div class="poke-modal__moves-section"><h4 class="poke-modal__moves-title">에픽 시네매틱 스킬</h4><div class="poke-modal__moves-list">${p.eliteCinematicMoves.map(m => `<span class="poke-modal__move poke-modal__move--elite">${moveToKorean(m)}</span>`).join("")}</div></div>`);
     }
     const movesHtmlStr = movesHtml.join("");
 
