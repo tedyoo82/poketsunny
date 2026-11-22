@@ -3,25 +3,27 @@
 (function () {
   "use strict";
 
-  // --- 방문자 카운팅 (countapi.mileshilliard.com 무료 API) ---
+  // --- 방문자 카운팅 (Firebase Realtime Database) ---
   function trackVisit() {
-    var id = "pokesunny_homepage_v1";
     var badge = document.querySelector(".visit-badge");
     if (!badge) return;
 
-    fetch("https://countapi.mileshilliard.com/api/v1/hit/" + id)
-      .then(function (r) {
-        if (!r.ok) throw new Error("HTTP " + r.status);
-        return r.json();
-      })
-      .then(function (data) {
-        var count = parseInt(data.value, 10) || 0;
-        badge.textContent = count.toLocaleString("ko-KR");
-      })
-      .catch(function (err) {
-        console.warn("[pokesunny] visit counter fetch failed:", err);
-        badge.textContent = "—";
-      });
+    initFirebase();
+    var visitDb = fbDb;
+
+    // 카운트 증가 (transaction으로 안전히)
+    visitDb.ref("visits/count").transaction(function (current) {
+      return (current || 0) + 1;
+    });
+
+    // 현재 카운트 읽기
+    visitDb.ref("visits/count").once("value", function (snap) {
+      var count = snap.val() || 0;
+      badge.textContent = count.toLocaleString("ko-KR");
+    }).catch(function (err) {
+      console.warn("[pokesunny] visit counter read failed:", err);
+      badge.textContent = "—";
+    });
   }
 
   // --- inline data 읽기 (GitHub Actions이 HTML에 임베드) ---
