@@ -88,42 +88,43 @@ def main():
     )
 
     # data-count attributes 업데이트 (히어로 통계)
-    # 구독자 (첫 번째 stat__num)
+    def set_data_count(index, value):
+        nonlocal html
+        pattern = r'(class="stat__num" data-count=")\d+(">)'
+        matches = list(re.finditer(pattern, html))
+        if len(matches) > index:
+            m = matches[index]
+            html = (
+                html[: m.start(1)]
+                + m.group(1)
+                + str(value)
+                + m.group(2)
+                + html[m.end(2) :]
+            )
+
     if "subscribers" in stats and stats["subscribers"]:
-        html = re.sub(
-            r'(class="stat__num" data-count=")\d+(">)',
-            lambda m: m.group(1) + str(stats["subscribers"]) + m.group(2),
-            html,
-            count=1,
-        )
-    # 동영상 (두 번째 stat__num)
+        set_data_count(0, stats["subscribers"])
     if "videos" in stats and stats["videos"]:
-        matches = list(
-            re.finditer(r'(class="stat__num" data-count=")\d+(">)', html)
-        )
-        if len(matches) >= 2:
-            m = matches[1]
-            html = (
-                html[: m.start(1)]
-                + m.group(1)
-                + str(stats["videos"])
-                + m.group(2)
-                + html[m.end(2) :]
-            )
-    # 조회수 (세 번째 stat__num)
+        set_data_count(1, stats["videos"])
     if "views" in stats and stats["views"]:
-        matches = list(
-            re.finditer(r'(class="stat__num" data-count=")\d+(">)', html)
-        )
-        if len(matches) >= 3:
-            m = matches[2]
-            html = (
-                html[: m.start(1)]
-                + m.group(1)
-                + str(stats["views"])
-                + m.group(2)
-                + html[m.end(2) :]
-            )
+        set_data_count(2, stats["views"])
+
+    # stat__val 초기 표시 숫자 업데이트 (애니메이션 시작 값)
+    val_idx = [0]
+    new_vals = [
+        str(stats.get("subscribers", "")),
+        str(stats.get("videos", "")),
+        f"{stats.get('views', 0):,}",
+    ]
+
+    def replace_val(m):
+        if val_idx[0] < len(new_vals):
+            result = f'<span class="stat__val">{new_vals[val_idx[0]]}</span>'
+            val_idx[0] += 1
+            return result
+        return m.group(0)
+
+    html = re.sub(r"<span class=\"stat__val\">[^<]*</span>", replace_val, html, count=3)
 
     # HTML 쓰기
     with open("index.html", "w", encoding="utf-8") as f:
