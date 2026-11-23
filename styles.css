@@ -1525,13 +1525,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0;
-  transition: opacity 0.2s ease, background 0.2s ease;
+  transition: background 0.2s ease;
   z-index: 2;
 }
-.poke-card:hover .poke-card__details {
-  opacity: 1;
-}
+
 .poke-card__details:hover {
   background: rgba(0, 0, 0, 0.8);
 }
