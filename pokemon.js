@@ -459,6 +459,17 @@
     return stat?.toString() || "—";
   }
 
+  function _classSuffix(pokemonClass) {
+    // styles.css에 정의된 클래스명(--legendary/--mythical/--ultra-beast)과 매칭
+    const map = { "전설": "legendary", "신비": "mythical", "울트라비스트": "ultra-beast" };
+    return map[pokemonClass] || pokemonClass.toLowerCase();
+  }
+
+  function slugify(name) {
+    // generate_pokemon_pages.py의 slugify와 동일: 소문자 + 비알파숫자(하이픈 제외) 제거
+    return name.toLowerCase().replace(/[^a-z0-9-]+/g, "");
+  }
+
   // ===== 데이터 로드 =====
   async function loadPokemonData() {
     try {
@@ -604,8 +615,9 @@
 
   // ===== 카드 생성 =====
   function createPokemonCard(p, index) {
-    const card = document.createElement("div");
+    const card = document.createElement("a");
     card.className = "poke-card";
+    card.href = `pokedex/pokemon-${p.dexNr}-${slugify(p.nameEn)}.html`;
     card.dataset.index = index;
 
     const typesHtml = (p.types || []).map((t) => {
@@ -615,7 +627,7 @@
     }).join("");
 
     const classBadge = p.pokemonClass
-      ? `<span class="poke-card__class poke-card__class--${p.pokemonClass.toLowerCase()}">${p.pokemonClass}</span>`
+      ? `<span class="poke-card__class poke-card__class--${_classSuffix(p.pokemonClass)}">${p.pokemonClass}</span>`
       : "";
 
     const megaBadge = p.hasMega ? `<span class="poke-card__badge poke-card__badge--mega">MEGA</span>` : "";
@@ -645,9 +657,15 @@
           </span>
         </div>
       </div>
+      <button class="poke-card__details" type="button" title="모달로 자세히 보기">
+        <span aria-hidden="true">&#x1F50D;</span>
+      </button>
     `;
 
-    card.addEventListener("click", () => openModal(p));
+    card.querySelector(".poke-card__details").addEventListener("click", (e) => {
+      e.stopPropagation();
+      openModal(p);
+    });
     return card;
   }
 
@@ -660,7 +678,7 @@
     }).join("");
 
     const classBadge = p.pokemonClass
-      ? `<span class="poke-modal__class poke-modal__class--${p.pokemonClass.toLowerCase()}">${p.pokemonClass}</span>`
+      ? `<span class="poke-modal__class poke-modal__class--${_classSuffix(p.pokemonClass)}">${p.pokemonClass}</span>`
       : "";
 
     const badges = [];
