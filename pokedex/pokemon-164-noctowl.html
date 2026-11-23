@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>야부엉 (Noctowl) — 포켓몬 사전 | 포케써니</title>
+  <meta name="description" content="포켓몬GO 야부엉 정보. 타입: 노말, 비행,generation 2세대, region 도쿠소. 체력 225, 공격력 145, 방어력 156." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://pokesunny.com/pokedex/pokemon-164-야부엉.html" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="포케써니" />
+  <meta property="og:title" content="포케써니 | 야부엉 (Noctowl)" />
+  <meta property="og:description" content="포켓몬GO 야부엉 — 타입: 노말, 비행 |generation 2세대 | 도쿠소" />
+  <meta property="og:url" content="https://pokesunny.com/pokedex/pokemon-164-야부엉.html" />
+  <meta property="og:image" content="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/164.png" />
+  <meta property="og:locale" content="ko_KR" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0b0b0f;
+      --card: #14141c;
+      --card-border: #2a2a3a;
+      --text: #e8e8f0;
+      --text-dim: #9898a8;
+      --accent: #f8d030;
+      --font-main: "Noto Sans KR", Poppins, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-main);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Header */
+    .header {
+      background: rgba(20, 20, 28, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 0.75rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      font-family: Poppins, var(--font-main);
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .brand__ball {
+      width: 28px; height: 28px;
+      background: radial-gradient(circle at 35% 35%, #ff6b6b, #c0392b);
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 8px rgba(255, 107, 107, 0.5);
+    }
+    .nav { display: flex; gap: 1.25rem; font-size: 0.9rem; }
+    .nav a { color: var(--text-dim); }
+    .nav a:hover { color: var(--text); text-decoration: none; }
+    .btn-sm {
+      padding: 0.4rem 0.9rem;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .btn-sm:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Main */
+    main { flex: 1; max-width: 900px; margin: 0 auto; width: 100%; padding: 2rem 1.5rem; }
+
+    /* Hero / monster card */
+    .monster-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .monster-card::before {
+      content: "";
+      position: absolute;
+      top: -60%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(248, 208, 48, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .monster-img {
+      width: 200px;
+      height: 200px;
+      object-fit: contain;
+      image-rendering: auto;
+      filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5));
+      margin-bottom: 1rem;
+    }
+    .monster-name-ko {
+      font-family: Poppins, var(--font-main);
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 0.25rem;
+    }
+    .monster-names {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+    .monster-names span { margin: 0 0.5rem; }
+    .monster-types {
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .type-badge {
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .monster-meta {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      margin-bottom: 1.5rem;
+    }
+    .monster-meta span { display: flex; align-items: center; gap: 0.35rem; }
+
+    /* Pokemon class badge (legendary / mythical / ultra beast) */
+    .poke-card__class {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.04em;
+    }
+    .poke-card__class--legendary {
+      background: linear-gradient(135deg, #f8d030, #f59e0b);
+      color: #0b0b0f;
+    }
+    .poke-card__class--mythical {
+      background: linear-gradient(135deg, #ee99ac, #a838f8);
+      color: #0b0b0f;
+    }
+    .poke-card__class--ultra-beast {
+      background: linear-gradient(135deg, #ef4444, #ee99ac);
+      color: #0b0b0f;
+    }
+
+    /* Sections */
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 2rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Stats */
+    .stat-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.6rem;
+    }
+    .stat-label { width: 70px; font-size: 0.9rem; color: var(--text-dim); text-align: right; }
+    .stat-bar {
+      flex: 1;
+      height: 10px;
+      background: #1e1e2e;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .stat-fill {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 0.3s;
+    }
+    .stat-value { width: 45px; font-size: 0.9rem; font-weight: 700; text-align: left; }
+
+    /* Moves */
+    .moves-section { margin-bottom: 1.5rem; }
+    .moves-section h3 {
+      font-size: 1rem;
+      margin-bottom: 0.6rem;
+      color: var(--text);
+    }
+    .moves-list {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .moves-list li {
+      background: #1e1e2e;
+      padding: 0.4rem 0.9rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      border: 1px solid var(--card-border);
+    }
+
+    /* Evolution */
+    .evo-section { margin-bottom: 1.5rem; }
+    .evo-section h3 { font-size: 1rem; margin-bottom: 0.6rem; }
+    .evo-list { list-style: none; }
+    .evo-list li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--card-border);
+      font-size: 0.95rem;
+    }
+    .evo-list li:last-child { border-bottom: none; }
+    .evo-link { font-weight: 600; color: var(--accent); }
+
+    /* Nav */
+    .page-nav {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--card-border);
+    }
+    .nav-link {
+      padding: 0.6rem 1.2rem;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      transition: all 0.2s;
+    }
+    .nav-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      border-top: 1px solid var(--card-border);
+      margin-top: 2rem;
+    }
+    footer a { color: var(--text-dim); }
+
+    @media (max-width: 600px) {
+      .monster-name-ko { font-size: 1.7rem; }
+      .monster-img { width: 160px; height: 160px; }
+      main { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header__inner">
+      <a class="brand" href="https://pokesunny.com/index.html">
+        <span class="brand__ball"></span>
+        <span>포케써니</span>
+      </a>
+      <nav class="nav">
+        <a href="https://pokesunny.com/index.html">홈</a>
+        <a href="https://pokesunny.com/pokemon.html">포켓몬 사전</a>
+        <a href="https://pokesunny.com/index.html#news">뉴스</a>
+        <a href="https://pokesunny.com/index.html#about">소개</a>
+      </nav>
+      <a class="btn-sm" href="https://www.youtube.com/@Poke_Sunny" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.5 15.5v-7l6.5 3.5-6.5 3.5Z"/></svg>
+        유튜브
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <div class="monster-card">
+      <img class="monster-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/164.png" alt="야부엉" loading="lazy" />
+      <div class="monster-name-ko">야부엉</div>
+      <div class="monster-names">
+        <span>Noctowl</span>
+        <span>·</span>
+        <span>ヨルノズク</span>
+      </div>
+      <div class="monster-types"><span class="type-badge" style="background-color:#A8A87822;color:#A8A878;" title="노말 타입">⚪ 노말</span><span class="type-badge" style="background-color:#A890FF22;color:#A890FF;" title="비행 타입">🕊️ 비행</span></div>
+      <div class="monster-meta">
+        <span>🎮 2세대</span>
+        <span>🗺️ 도쿠소</span>
+        
+        
+        
+      </div>
+
+      <div class="section-title">📊 스펙</div>
+      <div class="stats-grid"><div class="stat-row"><span class='stat-label'>체력</span><div class='stat-bar'><div class='stat-fill' style='width:100.0%;background-color:#E85858;'></div></div><span class='stat-value'>225</span></div><div class="stat-row"><span class='stat-label'>공격력</span><div class='stat-bar'><div class='stat-fill' style='width:64.4%;background-color:#F8D030;'></div></div><span class='stat-value'>145</span></div><div class="stat-row"><span class='stat-label'>방어력</span><div class='stat-bar'><div class='stat-fill' style='width:69.3%;background-color:#6890F0;'></div></div><span class='stat-value'>156</span></div></div>
+    </div>
+
+    <div class="section-title">⚔️ 스킬</div>
+    <div class="moves-section"><h3>퀵 스킬 (Fast Move)</h3><ul class='moves-list'><li>⚡ 날개치기</li><li>⚡ 염동력</li></ul></div><div class="moves-section"><h3>시네매틱 스킬 (Charge Move)</h3><ul class='moves-list'><li>💥 사이코키네시스</li><li>💥 스카이어택</li><li>💥 그림자분출</li><li>💥 섀도볼</li></ul></div>
+
+    
+
+    
+    <div class="section-title">📺 관련 영상</div>
+    <div style="margin-bottom:2rem;">
+      <a href="https://www.youtube.com/@Poke_Sunny/search?query=야부엉" target="_blank" rel="noopener" class="nav-link" style="display:inline-flex;">
+        유튜브에서 "야부엉" 검색하기 &rarr;
+      </a>
+    </div>
+
+    <div class="page-nav">
+      <a href='pokemon-163-hoothoot.html' class='nav-link'>&larr; 이전</a>
+      <a href='pokemon-165-ledyba.html' class='nav-link'>다음 &rarr;</a>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2026 포케써니 · Pokémon GO 데이터 제공: <a href="https://pokemon-go-api.github.io" target="_blank" rel="noopener">Pokémon GO API</a></p>
+  </footer>
+</body>
+</html>
