@@ -10,7 +10,7 @@ Each page is a standalone HTML file with:
   - Generation / region info
   - Prev / Next navigation
 
-Output: pokedex/pokemon-{dexNr}-{korean_name}.html
+Output: pokedex/pokemon-{dexNr}-{slugified_english_name}.html
 """
 
 import json
@@ -466,6 +466,7 @@ def image_url(pokemon: dict) -> str:
 def build_page(pokemon: dict, prev_file: str | None, next_file: str | None, dex_by_id: dict, name_by_id: dict) -> str:
     name_ko = pokemon["name"]
     name_en = pokemon.get("nameEn", "")
+    name_en_slug = slugify(name_en)
     name_ja = pokemon.get("nameJa", "")
     dex = pokemon.get("dexNr", "")
     types = pokemon.get("types") or []
@@ -541,13 +542,13 @@ def build_page(pokemon: dict, prev_file: str | None, next_file: str | None, dex_
   <title>{name_ko} ({name_en}) — 포켓몬 사전 | 포케써니</title>
   <meta name="description" content="포켓몬GO {name_ko} 정보. 타입: {', '.join(types)},generation {GEN_KOREAN.get(generation, '')}, region {REGION_KOREAN.get(region, '')}. 체력 {stats.get('stamina')}, 공격력 {stats.get('attack')}, 방어력 {stats.get('defense')}." />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://pokesunny.com/pokedex/pokemon-{dex}-{name_ko}.html" />
+  <link rel="canonical" href="https://pokesunny.com/pokedex/pokemon-{dex}-{name_en_slug}.html" />
 
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="포케써니" />
   <meta property="og:title" content="포케써니 | {name_ko} ({name_en})" />
   <meta property="og:description" content="포켓몬GO {name_ko} — 타입: {', '.join(types)} |generation {GEN_KOREAN.get(generation, '')} | {REGION_KOREAN.get(region, '')}" />
-  <meta property="og:url" content="https://pokesunny.com/pokedex/pokemon-{dex}-{name_ko}.html" />
+  <meta property="og:url" content="https://pokesunny.com/pokedex/pokemon-{dex}-{name_en_slug}.html" />
   <meta property="og:image" content="{image_url(pokemon)}" />
   <meta property="og:locale" content="ko_KR" />
 
