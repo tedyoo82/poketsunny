@@ -657,19 +657,8 @@
           </span>
         </div>
       </div>
-      <button class="poke-card__details" type="button" title="모달로 자세히 보기">
-        <svg class="poke-card__details-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
-          <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-        <span class="poke-card__details-label">자세히</span>
-      </button>
     `;
 
-    card.querySelector(".poke-card__details").addEventListener("click", (e) => {
-      e.stopPropagation();
-      openModal(p);
-    });
     return card;
   }
 

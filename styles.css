@@ -1512,41 +1512,6 @@ body {
   font-weight: 600;
   margin-right: 2px;
 }
-.poke-card__details {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: calc(100% - 28px);
-  margin: 12px auto 0;
-  padding: 12px 20px;
-  border: 2px solid rgba(0, 0, 0, 0.1);
-  border-radius: 16px;
-  background: var(--cyan);
-  color: #0a0c1c;
-  font-size: 1rem;
-  font-weight: 900;
-  letter-spacing: 0.02em;
-  cursor: pointer;
-  box-shadow: 0 6px 20px rgba(55, 214, 230, 0.35), 0 2px 6px rgba(0, 0, 0, 0.15);
-  transition: all 0.25s ease;
-}
-
-.poke-card__details:hover {
-  background: #2dd4e4;
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(55, 214, 230, 0.5), 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.poke-card__details:active {
-  transform: translateY(0);
-}
-
-.poke-card__details-icon {
-  width: 20px;
-  height: 20px;
-  vertical-align: middle;
-  margin-right: 6px;
-}
 .poke-card__stat-mini__value {
   color: var(--ink-soft);
   font-weight: 700;
